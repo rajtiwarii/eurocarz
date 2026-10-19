@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Portal — EuroCarz | Fleet & Booking Control</title>
+  <meta name="description" content="EuroCarz Admin Dashboard for managing car fleet, vehicle availability, booking approvals, advance payments, and monthly earnings." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .admin-header {
+      padding: 32px 0 20px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .admin-stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .admin-stat-card.highlight {
+      border-color: rgba(255, 214, 10, 0.4);
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 214, 10, 0.05) 100%);
+    }
+    .admin-stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-top: 6px;
+      color: var(--text-primary);
+    }
+    .admin-stat-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-tertiary);
+    }
+
+    .main-tabs {
+      display: flex;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
+    }
+    .main-tab {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-tertiary);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .main-tab.active {
+      color: var(--text-primary);
+      border-bottom-color: var(--accent-white);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .status-pending { background: rgba(255, 214, 10, 0.15); color: #ffd60a; border: 1px solid rgba(255, 214, 10, 0.3); }
+    .status-accepted { background: rgba(48, 209, 88, 0.15); color: #30d158; border: 1px solid rgba(48, 209, 88, 0.3); }
+    .status-completed { background: rgba(10, 132, 255, 0.15); color: #0a84ff; border: 1px solid rgba(10, 132, 255, 0.3); }
+    .status-rejected { background: rgba(255, 69, 58, 0.15); color: #ff453a; border: 1px solid rgba(255, 69, 58, 0.3); }
+
+    .booking-table-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      overflow-x: auto;
+    }
+    .booking-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    .booking-table th {
+      padding: 16px 20px;
+      background: var(--bg-surface);
+      color: var(--text-tertiary);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .booking-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      vertical-align: middle;
+    }
+    .booking-table tr:last-child td { border-bottom: none; }
+    .booking-table tr:hover td { background: var(--bg-elevated); }
+
+    .action-btn {
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .btn-accept { background: #30d158; color: #000; font-weight: 700; }
+    .btn-accept:hover { background: #28b84c; }
+    .btn-reject { background: rgba(255, 69, 58, 0.15); color: #ff453a; border-color: rgba(255, 69, 58, 0.3); }
+    .btn-reject:hover { background: rgba(255, 69, 58, 0.3); }
+    .btn-complete { background: var(--bg-surface); color: var(--text-primary); border-color: var(--border-default); }
+    .btn-complete:hover { background: var(--bg-elevated); }
+
+    .fleet-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .fleet-img {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+    }
+
+    /* Admin Login Box */
+    .admin-login-box {
+      max-width: 440px;
+      margin: 80px auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-xl);
+      padding: 36px 32px;
+      box-shadow: var(--shadow-xl);
+    }
+
+    @media (max-width: 900px) {
+      .admin-stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-mark">E</div>
+          EuroCarz <span class="badge badge-white" style="font-size:0.65rem;margin-left:8px;padding:2px 8px">ADMIN PORTAL</span>
+        </a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Main Site</a>
+          <a href="cars.html" class="nav-link">Browse Cars</a>
+          <a href="admin.html" class="nav-link active">Admin Portal</a>
+        </div>
+        <div class="nav-actions" id="admin-nav-actions">
+          <button class="btn btn-secondary btn-sm" onclick="loadAdminDashboard()">🔄 Refresh</button>
+          <button class="btn btn-ghost btn-sm" id="logout-btn" onclick="handleGlobalLogout()" style="display:none;color:#ff453a;border-color:rgba(255,69,58,0.3)">🔒 Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main style="padding-top: var(--nav-height)">
+
+    <!-- LOGIN SCREEN (If not authed) -->
+    <div id="admin-login-view">
+      <div class="container">
+        <div class="admin-login-box text-center">
+          <div style="font-size: 2.5rem; margin-bottom: 12px">🔐</div>
+          <h2 class="heading-lg" style="margin-bottom:8px">Sign In to EuroCarz</h2>
+          <p class="subheading" style="font-size:0.875rem;margin-bottom:24px">Sign in to your account. Authorized admins will automatically access the Control Panel.</p>
+
+          <form onsubmit="handleAdminSignIn(event)" style="text-align:left">
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" id="admin-page-email" required value="tiwariraj1620@gmail.com" placeholder="you@example.com" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-input" id="admin-page-password" required placeholder="•••••••••" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:8px">
+              Sign In
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD VIEW (If authed) -->
+    <div id="admin-dashboard-view" style="display:none">
+
+      <!-- HEADER -->
+      <div class="admin-header">
+        <div class="container">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+            <div>
+              <h1 class="display-md" style="margin-bottom:4px">Admin Control Panel</h1>
+              <p class="subheading">Logged in as <strong style="color:var(--text-primary)">tiwariraj1620@gmail.com</strong></p>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-primary" onclick="openAddCarModal()">
+                ➕ Add New Vehicle
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-sm">
+        <div class="container">
+
+          <!-- STATS -->
+          <div class="admin-stats-grid">
+            <div class="admin-stat-card highlight">
+              <div class="admin-stat-label">Current Month Earnings</div>
+              <div class="admin-stat-value" id="stat-month-earnings" style="color:#ffd60a">₹0</div>
+              <div style="font-size:0.7rem;color:var(--text-tertiary);margin-top:4px" id="stat-month-label">August 2026</div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-label">Total All-Time Revenue</div>
+              <div class="admin-stat-value" id="stat-total-revenue">₹0</div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-label">Pending Requests</div>
+              <div class="admin-stat-value" id="stat-pending" style="color:#ffd60a">0</div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-label">Active Fleet Vehicles</div>
+              <div class="admin-stat-value" id="stat-fleet-count">0</div>
+            </div>
+          </div>
+
+          <!-- MAIN TABS -->
+          <div class="main-tabs">
+            <button class="main-tab active" onclick="switchMainTab('bookings', this)">📋 Booking Requests</button>
+            <button class="main-tab" onclick="switchMainTab('fleet', this)">🚗 Fleet Management &amp; Availability</button>
+          </div>
+
+          <!-- TAB 1: BOOKING REQUESTS -->
+          <div id="tab-content-bookings">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+              <div class="tab-group">
+                <button class="tab-btn active" onclick="filterStatus('all', this)">All</button>
+                <button class="tab-btn" onclick="filterStatus('pending', this)">Pending</button>
+                <button class="tab-btn" onclick="filterStatus('accepted', this)">Accepted</button>
+                <button class="tab-btn" onclick="filterStatus('completed', this)">Completed</button>
+                <button class="tab-btn" onclick="filterStatus('rejected', this)">Rejected</button>
+              </div>
+              <div style="font-size:0.875rem;color:var(--text-tertiary)" id="booking-count-label">Loading bookings...</div>
+            </div>
+
+            <div class="booking-table-wrap">
+              <table class="booking-table">
+                <thead>
+                  <tr>
+                    <th>Ref ID</th>
+                    <th>Vehicle</th>
+                    <th>Customer Details</th>
+                    <th>Pickup Info</th>
+                    <th>Duration</th>
+                    <th>Total &amp; Advance</th>
+                    <th>Status</th>
+                    <th>Admin Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bookings-tbody">
+                  <tr>
+                    <td colspan="8" style="text-align:center;padding:40px;color:var(--text-tertiary)">
+                      Loading ride requests...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 2: FLEET MANAGEMENT -->
+          <div id="tab-content-fleet" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+              <h3 class="heading">Vehicle Fleet Controls</h3>
+              <button class="btn btn-primary btn-sm" onclick="openAddCarModal()">➕ Add New Vehicle</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(340px, 1fr));gap:16px" id="fleet-grid">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ACCEPT BOOKING WITH ADVANCE MODAL -->
+  <div class="modal-overlay" id="accept-modal">
+    <div class="modal">
+      <div class="modal-icon">✅</div>
+      <h2 class="modal-title">Accept Booking Request</h2>
+      <p class="modal-desc" id="accept-modal-desc">Enter the advance payment amount taken from the customer to confirm this ride.</p>
+      
+      <div class="form-group" style="text-align:left;margin-top:16px">
+        <label class="form-label">Advance Amount Received (₹)</label>
+        <input type="number" class="form-input" id="advance-input" placeholder="e.g. 1000" min="0" value="1000" />
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-primary btn-full" onclick="submitAcceptBooking()">Confirm &amp; Accept Ride</button>
+        <button class="btn btn-ghost btn-full" onclick="closeAcceptModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD CAR MODAL -->
+  <div class="modal-overlay" id="add-car-modal">
+    <div class="modal" style="max-width:600px;text-align:left">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h2 class="modal-title" style="margin:0">➕ Add New Vehicle to Fleet</h2>
+        <button onclick="closeAddCarModal()" style="background:none;border:none;color:var(--text-tertiary);font-size:1.25rem;cursor:pointer">✕</button>
+      </div>
+
+      <form id="add-car-form" onsubmit="submitNewCar(event)">
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Vehicle Name *</label>
+            <input type="text" class="form-input" id="new-car-name" required placeholder="e.g. Mahindra Thar 4x4" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Color *</label>
+            <input type="text" class="form-input" id="new-car-color" required placeholder="e.g. Deep Black, White" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fuel Type</label>
+            <select class="form-input form-select" id="new-car-fuel">
+              <option value="petrol">Petrol</option>
+              <option value="diesel">Diesel</option>
+              <option value="electric">Electric</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Transmission</label>
+            <select class="form-input form-select" id="new-car-trans">
+              <option value="manual">Manual</option>
+              <option value="automatic">Automatic</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Seats</label>
+            <select class="form-input form-select" id="new-car-seats">
+              <option value="5">5 Seats</option>
+              <option value="7">7 Seats</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Included Mileage (KM/day)</label>
+            <input type="number" class="form-input" id="new-car-km" value="300" placeholder="300" />
+          </div>
+        </div>
+
+        <div style="background:var(--bg-surface);padding:16px;border-radius:var(--radius-lg);margin-bottom:16px">
+          <div class="form-label" style="margin-bottom:10px">Pricing Setup (₹)</div>
+          <div class="grid-3" style="gap:10px">
+            <div>
+              <label class="form-label" style="font-size:0.75rem">6 Hours Price *</label>
+              <input type="number" class="form-input" id="new-car-p6" required placeholder="1000" />
+            </div>
+            <div>
+              <label class="form-label" style="font-size:0.75rem">12 Hours Price *</label>
+              <input type="number" class="form-input" id="new-car-p12" required placeholder="1800" />
+            </div>
+            <div>
+              <label class="form-label" style="font-size:0.75rem">Full Day Price *</label>
+              <input type="number" class="form-input" id="new-car-pday" required placeholder="3000" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Features &amp; Amenities (comma-separated)</label>
+          <input type="text" class="form-input" id="new-car-features" placeholder="e.g. Sunroof, ADAS, 360 Camera, Bose Audio, Leather Seats" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Image URL (Optional)</label>
+          <input type="text" class="form-input" id="new-car-image" placeholder="images/roxx.jpg or https://..." />
+        </div>
+
+        <div class="modal-actions" style="margin-top:20px">
+          <button type="submit" class="btn btn-primary btn-full">🚀 Add Car to Fleet</button>
+          <button type="button" class="btn btn-ghost btn-full" onclick="closeAddCarModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+  <script>
+    const ADMIN_EMAIL = 'tiwariraj1620@gmail.com';
+    const ADMIN_PASS  = '987654321';
+
+    let currentBookings = [];
+    let currentFleet = [];
+    let activeFilter = 'all';
+    let targetAcceptBookingId = null;
+
+    function getLoggedInUser() {
+      try {
+        return JSON.parse(localStorage.getItem('eurocarz_user_session') || 'null');
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function handleAdminSignIn(e) {
+      if (e) e.preventDefault();
+      const email = document.getElementById('admin-page-email')?.value?.trim();
+      const pass  = document.getElementById('admin-page-password')?.value;
+
+      if (!email || !pass) {
+        alert('Please enter your email and password.');
+        return;
+      }
+
+      if (email.toLowerCase() === ADMIN_EMAIL.toLowerCase() && pass === ADMIN_PASS) {
+        const session = { email: ADMIN_EMAIL, role: 'admin', name: 'Raj Tiwari (Admin)' };
+        localStorage.setItem('eurocarz_user_session', JSON.stringify(session));
+        localStorage.setItem('eurocarz_admin_authed', 'true');
+        checkAuth();
+      } else {
+        alert('Invalid admin credentials. Access denied.');
+      }
+    }
+
+    // Check Auth State
+    function checkAuth() {
+      const user = getLoggedInUser();
+      if (user && user.role === 'admin') {
+        document.getElementById('admin-login-view').style.display = 'none';
+        document.getElementById('admin-dashboard-view').style.display = 'block';
+        document.getElementById('logout-btn').style.display = 'inline-flex';
+        loadAdminDashboard();
+      } else {
+        document.getElementById('admin-login-view').style.display = 'block';
+        document.getElementById('admin-dashboard-view').style.display = 'none';
+        document.getElementById('logout-btn').style.display = 'none';
+      }
+    }
+
+    function adminLogout() {
+      if (confirm('Logout from Admin Portal?')) {
+        localStorage.removeItem('eurocarz_admin_authed');
+        localStorage.removeItem('eurocarz_user_session');
+        checkAuth();
+      }
+    }
+
+    async function loadAdminDashboard() {
+
+      const user = getLoggedInUser();
+      if (!user || user.role !== 'admin') return;
+
+      // 1. Load Bookings
+      const { data: bookings } = await dbGetBookings();
+      currentBookings = bookings || [];
+
+      // 2. Load Fleet
+      const { data: fleet } = await dbGetCars(true);
+      currentFleet = fleet || [];
+
+      // Calculate Stats
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear  = now.getFullYear();
+      
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      document.getElementById('stat-month-label').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+      let monthRevenue = 0;
+      let totalRevenue = 0;
+
+      currentBookings.forEach(b => {
+        const val = Number(b.total_price || 0);
+        if (b.status !== 'rejected' && b.status !== 'cancelled') {
+          totalRevenue += val;
+          const bDate = new Date(b.created_at || Date.now());
+          if (bDate.getMonth() === currentMonth && bDate.getFullYear() === currentYear) {
+            monthRevenue += val;
+          }
+        }
+      });
+
+      document.getElementById('stat-month-earnings').textContent = `₹${monthRevenue.toLocaleString('en-IN')}`;
+      document.getElementById('stat-total-revenue').textContent  = `₹${totalRevenue.toLocaleString('en-IN')}`;
+      document.getElementById('stat-pending').textContent        = currentBookings.filter(b => b.status === 'pending').length;
+      document.getElementById('stat-fleet-count').textContent    = currentFleet.filter(c => c.available).length + ` / ${currentFleet.length}`;
+
+      renderBookingsTable();
+      renderFleetGrid();
+    }
+
+    function renderBookingsTable() {
+      const tbody = document.getElementById('bookings-tbody');
+      const filtered = activeFilter === 'all' 
+        ? currentBookings 
+        : currentBookings.filter(b => b.status === activeFilter);
+
+      document.getElementById('booking-count-label').textContent = `Showing ${filtered.length} request${filtered.length !== 1 ? 's' : ''}`;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align:center;padding:60px 20px;color:var(--text-tertiary)">
+              <div style="font-size:2rem;margin-bottom:8px">📋</div>
+              <p style="font-weight:600;color:var(--text-secondary)">No requests found under "${activeFilter}"</p>
+            </td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(b => {
+        const carName = b.car_name || (b.cars ? b.cars.name : 'Vehicle');
+        const refId   = b.id || 'N/A';
+        const status  = b.status || 'pending';
+        
+        let statusBadgeClass = 'status-pending';
+        if (status === 'accepted' || status === 'confirmed') statusBadgeClass = 'status-accepted';
+        else if (status === 'completed') statusBadgeClass = 'status-completed';
+        else if (status === 'rejected' || status === 'cancelled') statusBadgeClass = 'status-rejected';
+
+        const advanceText = b.advance_amount ? `<div style="font-size:0.75rem;color:#30d158;font-weight:700;margin-top:2px">Advance: ₹${Number(b.advance_amount).toLocaleString('en-IN')}</div>` : '';
+
+        return `
+          <tr>
+            <td>
+              <strong style="color:var(--text-primary);font-family:monospace;font-size:0.875rem">#${refId}</strong>
+              <div style="font-size:0.7rem;color:var(--text-tertiary);margin-top:2px">${new Date(b.created_at || Date.now()).toLocaleDateString()}</div>
+            </td>
+            <td>
+              <div style="font-weight:700;color:var(--text-primary)">${carName}</div>
+            </td>
+            <td>
+              <div style="font-weight:600;color:var(--text-primary)">${b.customer_name || 'N/A'}</div>
+              <div style="font-size:0.75rem;color:var(--text-tertiary)">📞 ${b.customer_phone || 'N/A'}</div>
+              <div style="font-size:0.75rem;color:var(--text-tertiary)">✉️ ${b.customer_email || 'N/A'}</div>
+            </td>
+            <td>
+              <div style="font-weight:600;color:var(--text-primary)">📍 ${b.city || 'N/A'}</div>
+              <div style="font-size:0.75rem;color:var(--text-secondary)">📅 ${b.pickup_date || 'N/A'} at ${b.pickup_time || '10:00 AM'}</div>
+            </td>
+            <td>
+              <span class="badge badge-outline">${b.duration_label || b.duration || 'Full Day'}</span>
+            </td>
+            <td>
+              <strong style="color:var(--text-primary);font-size:0.95rem">₹${Number(b.total_price || 0).toLocaleString('en-IN')}</strong>
+              ${advanceText}
+            </td>
+            <td>
+              <span class="status-badge ${statusBadgeClass}">${status}</span>
+            </td>
+            <td>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                ${status === 'pending' ? `
+                  <button class="action-btn btn-accept" onclick="openAcceptModal('${refId}')">✅ Accept</button>
+                  <button class="action-btn btn-reject" onclick="rejectBooking('${refId}')">✖ Reject</button>
+                ` : ''}
+                ${status === 'accepted' || status === 'confirmed' ? `
+                  <button class="action-btn btn-complete" onclick="updateBookingStatus('${refId}', 'completed')">🏁 Complete</button>
+                  <button class="action-btn btn-reject" onclick="rejectBooking('${refId}')">✖ Cancel</button>
+                ` : ''}
+                ${status === 'rejected' || status === 'completed' || status === 'cancelled' ? `
+                  <span style="font-size:0.75rem;color:var(--text-tertiary)">Closed</span>
+                ` : ''}
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+    }
+
+    function renderFleetGrid() {
+      const fleetGrid = document.getElementById('fleet-grid');
+      fleetGrid.innerHTML = currentFleet.map(c => `
+        <div class="fleet-card">
+          <div style="display:flex;gap:14px;align-items:center">
+            <img src="${c.image || c.image_url || 'images/roxx.jpg'}" class="fleet-img" alt="${c.name}" />
+            <div>
+              <div style="font-weight:700;color:var(--text-primary)">${c.name}</div>
+              <div style="font-size:0.75rem;color:var(--text-tertiary)">${c.color || 'Standard'} · ${c.transmission} · ${c.fuel}</div>
+              <div style="font-size:0.8125rem;font-weight:700;margin-top:4px">₹${(c.price_day || 0).toLocaleString('en-IN')}/day</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <button class="action-btn ${c.available ? 'btn-accept' : 'btn-reject'}" onclick="toggleFleetAvailability(${c.id}, ${!c.available})" style="font-size:0.7rem;margin-bottom:4px">
+              ${c.available ? '🟢 Available' : '🔴 Unavailable'}
+            </button>
+            <div style="font-size:0.65rem;color:var(--text-tertiary)">Click to toggle</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function switchMainTab(tab, btn) {
+      document.querySelectorAll('.main-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-content-bookings').style.display = tab === 'bookings' ? 'block' : 'none';
+      document.getElementById('tab-content-fleet').style.display    = tab === 'fleet' ? 'block' : 'none';
+    }
+
+    function filterStatus(status, btn) {
+      activeFilter = status;
+      document.querySelectorAll('.tab-group .tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderBookingsTable();
+    }
+
+    // Modal Actions
+    function openAcceptModal(id) {
+      targetAcceptBookingId = id;
+      document.getElementById('accept-modal').classList.add('open');
+    }
+    function closeAcceptModal() {
+      document.getElementById('accept-modal').classList.remove('open');
+    }
+    async function submitAcceptBooking() {
+      const adv = parseInt(document.getElementById('advance-input').value || '0', 10);
+      if (targetAcceptBookingId) {
+        await dbUpdateBookingStatus(targetAcceptBookingId, 'accepted', adv);
+        closeAcceptModal();
+        await loadAdminDashboard();
+      }
+    }
+
+    async function rejectBooking(id) {
+      if (confirm('Reject this booking request?')) {
+        await dbUpdateBookingStatus(id, 'rejected');
+        await loadAdminDashboard();
+      }
+    }
+
+    async function updateBookingStatus(id, status) {
+      await dbUpdateBookingStatus(id, status);
+      await loadAdminDashboard();
+    }
+
+    async function toggleFleetAvailability(carId, newStatus) {
+      await dbToggleCarAvailability(carId, newStatus);
+      await loadAdminDashboard();
+    }
+
+    // Add Car Modal
+    function openAddCarModal() {
+      document.getElementById('add-car-modal').classList.add('open');
+    }
+    function closeAddCarModal() {
+      document.getElementById('add-car-modal').classList.remove('open');
+    }
+
+    async function submitNewCar(e) {
+      e.preventDefault();
+      const featuresStr = document.getElementById('new-car-features').value || '';
+      const featuresArr = featuresStr.split(',').map(s => s.trim()).filter(Boolean);
+
+      const carData = {
+        name:         document.getElementById('new-car-name').value,
+        color:        document.getElementById('new-car-color').value,
+        fuel:         document.getElementById('new-car-fuel').value,
+        transmission: document.getElementById('new-car-trans').value,
+        seats:        document.getElementById('new-car-seats').value,
+        km:           document.getElementById('new-car-km').value,
+        price_6hr:    document.getElementById('new-car-p6').value,
+        price_12hr:   document.getElementById('new-car-p12').value,
+        price_day:    document.getElementById('new-car-pday').value,
+        features:     featuresArr.length ? featuresArr : ['Air Conditioning', 'Power Windows'],
+        image:        document.getElementById('new-car-image').value || 'images/roxx.jpg',
+        cities:       ['Jalandhar', 'Phagwara']
+      };
+
+      await dbAddCar(carData);
+      closeAddCarModal();
+      alert('✅ New vehicle added successfully to the fleet!');
+      await loadAdminDashboard();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth();
+      setInterval(() => {
+        if (localStorage.getItem('eurocarz_admin_authed') === 'true') {
+          loadAdminDashboard();
+        }
+      }, 3000);
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'eurocarz_bookings' || e.key === 'eurocarz_custom_cars' || e.key === 'eurocarz_unavailable_cars') {
+          loadAdminDashboard();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

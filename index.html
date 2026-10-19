@@ -1,514 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AAROHH — The Professional Network for Lifestyle & Fitness</title>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Aarohh is the intelligent social network for lifestyle and fitness. Connect with friends, sync wearable sensors, track metrics, and connect with elite trainers.">
-    <meta property="og:title" content="AAROHH — The Professional Network for Lifestyle & Fitness">
-    <meta property="og:description" content="Intelligent social network for lifestyle and fitness. Connect with friends, track daily wellness targets, and train with elite coaches.">
-    <meta property="og:image" content="assets/logo_square.png">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/logo_square.png?v=6.0">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/logo_square.png?v=6.0">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/logo_square.png?v=6.0">
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?v=6.0">
-    <link rel="stylesheet" href="style.css?v=2.6">
-    
-    <!-- Supabase SDK -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EuroCarz — Premium Car Rental | Drive the Extraordinary</title>
+  <meta name="description" content="Rent premium self-drive cars across India. Verified hosts, fully insured vehicles, doorstep delivery, and 24/7 support. Starting ₹3,500/day. Book now!" />
+  <meta name="keywords" content="luxury car rental, self-drive, premium cars, EuroCarz, car booking India" />
+  <meta property="og:title" content="EuroCarz — Premium Car Rental" />
+  <meta property="og:description" content="Drive the extraordinary. Rent premium self-drive cars across India." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <!-- Navbar -->
-    <header class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo-container" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
-                <img src="assets/logo_icon.png" alt="AAROHH Logo Icon" style="height: 24px; width: auto; display: block; object-fit: contain;">
-                <img src="assets/logo_wordmark.png" alt="AAROHH" style="height: 8px; width: auto; display: block; object-fit: contain; margin-top: 0;">
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-mark">E</div>
+          EuroCarz
+        </a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link active">Home</a>
+          <a href="cars.html" class="nav-link">Browse Cars</a>
+        </div>
+        <div class="nav-actions">
+          <a href="cars.html" class="btn-nav-signin" style="text-decoration:none">Book Now</a>
+          <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="cars.html" class="nav-link">Browse Cars</a>
+    <a href="cars.html" class="nav-link">Book Now</a>
+  </div>
+
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg" style="background-image: url('images/hero.jpg')"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-eyebrow fade-in-up">
+            <span class="hero-eyebrow-dot"></span>
+            India's most premium car rental marketplace
+          </div>
+          <h1 class="display-xl hero-headline fade-in-up fade-delay-1">
+            Drive the<br />Extraordinary.
+          </h1>
+          <p class="hero-subtitle fade-in-up fade-delay-2">
+            Rent verified, fully-insured premium cars with doorstep delivery across 30+ cities. No chauffeur needed — just you and the open road.
+          </p>
+
+          <!-- SEARCH BOX -->
+          <div class="search-box fade-in-up fade-delay-3">
+            <div class="search-fields">
+              <div class="search-field">
+                <div class="search-field-label">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+                  City
+                </div>
+                <select class="search-input" id="search-city">
+                  <option value="">Select city</option>
+                  <option value="Phagwara">Phagwara</option>
+                  <option value="Jalandhar">Jalandhar</option>
+                  <option value="Mohali">Mohali</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                </select>
+              </div>
+              <div class="search-field">
+                <div class="search-field-label">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                  Pick-up Date
+                </div>
+                <input type="date" class="search-input" id="search-pickup" />
+              </div>
+              <div class="search-field">
+                <div class="search-field-label">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                  Drop-off Date
+                </div>
+                <input type="date" class="search-input" id="search-dropoff" />
+              </div>
+            </div>
+            <div class="search-action">
+              <button class="btn-search" id="search-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.34-4.34"/></svg>
+                Search Available Cars
+              </button>
+            </div>
+          </div>
+
+          <!-- STATS -->
+          <div class="stats-bar fade-in-up fade-delay-4">
+            <div class="stat-item">
+              <span class="stat-value">6</span>
+              <span class="stat-label">Verified Cars</span>
+            </div>
+            <div class="stat-dot"></div>
+            <div class="stat-item">
+              <span class="stat-value">4 Cities</span>
+              <span class="stat-label">Punjab & Chandigarh</span>
+            </div>
+            <div class="stat-dot"></div>
+            <div class="stat-item">
+              <span class="stat-value">4.7★</span>
+              <span class="stat-label">Average Rating</span>
+            </div>
+            <div class="stat-dot"></div>
+            <div class="stat-item">
+              <span class="stat-value">100%</span>
+              <span class="stat-label">Insured Fleet</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED CARS -->
+    <section class="section" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="section-header fade-in-up">
+          <span class="label">Our Fleet</span>
+          <h2 class="display-md">Featured Cars</h2>
+          <p class="subheading">Handpicked premium vehicles, verified and ready to go.</p>
+        </div>
+        <div class="grid-3" id="featured-cars-grid"></div>
+        <div style="text-align:center;margin-top:48px" class="fade-in-up">
+          <a href="cars.html" class="btn btn-secondary btn-lg">
+            View All Cars
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" style="background: var(--bg-primary)">
+      <div class="container">
+        <div class="section-header fade-in-up">
+          <span class="label">Process</span>
+          <h2 class="display-md">How It Works</h2>
+          <p class="subheading">From search to drive in four simple steps.</p>
+        </div>
+        <div class="steps-grid">
+          <div class="step-item fade-in-up">
+            <div class="step-number">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h3 class="step-title">Choose Your City</h3>
+            <p class="step-desc">Enter your city and dates to browse our curated fleet of premium vehicles near you.</p>
+          </div>
+          <div class="step-item fade-in-up fade-delay-1">
+            <div class="step-number">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 10h2"/><path d="M16 14h2"/><path d="M6.17 15a3 3 0 0 1 5.66 0"/><circle cx="9" cy="11" r="2"/><rect x="2" y="5" width="20" height="14" rx="2"/></svg>
+            </div>
+            <h3 class="step-title">Verify Profile</h3>
+            <p class="step-desc">Quick one-time digital verification with your licence and ID for a secure booking.</p>
+          </div>
+          <div class="step-item fade-in-up fade-delay-2">
+            <div class="step-number">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+            </div>
+            <h3 class="step-title">Pick Your Car</h3>
+            <p class="step-desc">Browse sedans, SUVs, electrics and luxury cars. Filter by price, transmission, and more.</p>
+          </div>
+          <div class="step-item fade-in-up fade-delay-3">
+            <div class="step-number">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+            </div>
+            <h3 class="step-title">Hit the Road</h3>
+            <p class="step-desc">Confirm your booking, get doorstep delivery, and enjoy your premium drive.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY EUROCARZ -->
+    <section class="section" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="section-header fade-in-up">
+          <span class="label">Why Us</span>
+          <h2 class="display-md">The EuroCarz Difference</h2>
+          <p class="subheading">We don't just rent cars — we curate experiences.</p>
+        </div>
+        <div class="grid-4">
+          <div class="feature-card fade-in-up">
+            <div class="feature-icon">🛡️</div>
+            <h3 class="feature-title">Fully Insured</h3>
+            <p class="feature-desc">Every car comes with comprehensive insurance. Drive confidently knowing you're protected.</p>
+          </div>
+          <div class="feature-card fade-in-up fade-delay-1">
+            <div class="feature-icon">✅</div>
+            <h3 class="feature-title">Verified Hosts</h3>
+            <p class="feature-desc">Every host is background-checked and every car is inspected before listing.</p>
+          </div>
+          <div class="feature-card fade-in-up fade-delay-2">
+            <div class="feature-icon">🚪</div>
+            <h3 class="feature-title">Doorstep Delivery</h3>
+            <p class="feature-desc">Your car comes to you. No pickup queues, no stress — just open the door and drive.</p>
+          </div>
+          <div class="feature-card fade-in-up fade-delay-3">
+            <div class="feature-icon">📞</div>
+            <h3 class="feature-title">24/7 Support</h3>
+            <p class="feature-desc">Our team is available round-the-clock for any assistance on the road.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section" style="background: var(--bg-primary)">
+      <div class="container">
+        <div class="section-header fade-in-up">
+          <span class="label">Reviews</span>
+          <h2 class="display-md">Stories from the Road</h2>
+          <p class="subheading">Real reviews from verified renters.</p>
+        </div>
+        <div class="grid-3">
+          <div class="testimonial-card fade-in-up">
+            <div class="stars">
+              <span style="color:#ffd60a;font-size:15px">★★★★★</span>
+            </div>
+            <p class="testimonial-text">"Absolutely seamless experience. The BMW 5 Series was in immaculate condition and arrived right on time. EuroCarz has completely changed how I travel for business."</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">R</div>
+              <div>
+                <div class="testimonial-name">Rahul Sharma</div>
+                <div class="testimonial-detail">BMW 5 Series · Mumbai</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card fade-in-up fade-delay-1">
+            <div class="stars">
+              <span style="color:#ffd60a;font-size:15px">★★★★★</span>
+            </div>
+            <p class="testimonial-text">"Rented the Tesla Model 3 for a weekend in Goa. The car was spotless, fully charged, and the host was incredibly helpful. Best road trip ever!"</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">P</div>
+              <div>
+                <div class="testimonial-name">Priya Nair</div>
+                <div class="testimonial-detail">Tesla Model 3 · Goa</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card fade-in-up fade-delay-2">
+            <div class="stars">
+              <span style="color:#ffd60a;font-size:15px">★★★★★</span>
+            </div>
+            <p class="testimonial-text">"The Range Rover Sport for our Ladakh trip was a dream. EuroCarz's insurance coverage gave us peace of mind on those mountain roads. 10/10!"</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">A</div>
+              <div>
+                <div class="testimonial-name">Aditya Bose</div>
+                <div class="testimonial-detail">Range Rover Sport · Delhi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHATSAPP CTA -->
+    <section class="host-cta-section">
+      <div class="container">
+        <div class="host-cta-inner">
+          <div class="fade-in-up">
+            <span class="badge badge-white" style="margin-bottom:20px">💬 Direct WhatsApp Enquiry</span>
+            <h2 class="display-lg" style="margin-bottom:16px">
+              Need a Custom Trip<br />or Instant Quote?
+            </h2>
+            <p class="subheading" style="max-width:420px;margin-bottom:32px">
+              Message us directly on WhatsApp with your travel requirements, dates, and preferred car. Our team will get back to you immediately with rates and availability.
+            </p>
+            <div class="host-stats">
+              <div>
+                <div class="host-stat-value">Instant</div>
+                <div class="host-stat-label">Fast WhatsApp response</div>
+              </div>
+              <div>
+                <div class="host-stat-value">100%</div>
+                <div class="host-stat-label">Sanitized &amp; insured</div>
+              </div>
+              <div>
+                <div class="host-stat-value">Doorstep</div>
+                <div class="host-stat-label">Delivery available</div>
+              </div>
+            </div>
+            <a href="https://wa.me/919855505912?text=Hello!%20I%20would%20like%20to%20enquire%20about%20a%20car%20rental." target="_blank" class="btn btn-primary btn-lg" style="background:#25d366;border-color:#25d366">
+              💬 Chat on WhatsApp
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
-            <nav class="nav-links" id="navLinks">
-                <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Home</a>
-                <a href="#features">Features</a>
-            </nav>
-            <div class="auth-nav-container" id="authNav">
-                <button class="nav-cta" onclick="window.location.href='login/'">Sign In</button>
-            </div>
-            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Navigation Menu">
-                <span></span>
-                <span></span>
-            </button>
+          </div>
+          <div class="host-cta-image-wrap fade-in-up fade-delay-1">
+            <img src="images/fortuner.jpg" alt="EuroCarz Premium Fleet" />
+          </div>
         </div>
-    </header>
+      </div>
+    </section>
 
-    <div class="mobile-nav" id="mobileNav">
-        <div id="mobileNavLinks" style="display: flex; flex-direction: column; width: 100%; gap: 15px; margin-bottom: 20px;">
-            <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="mobile-link">Home</a>
-            <a href="#features" class="mobile-link">Features</a>
+    <!-- PROMO BANNER -->
+    <section style="padding:48px 0;background:var(--bg-primary)">
+      <div class="container">
+        <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-xl);padding:32px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;" class="fade-in-up">
+          <div>
+            <span class="label">Limited Offer</span>
+            <h3 style="font-size:1.5rem;font-weight:800;margin:8px 0 4px;letter-spacing:-0.02em">🎉 First Ride: Use <span style="background:var(--bg-elevated);border:1px dashed var(--border-strong);padding:4px 14px;border-radius:8px;font-family:monospace;letter-spacing:0.05em">EURO500</span></h3>
+            <p style="color:var(--text-tertiary);font-size:0.875rem">Get ₹500 OFF your first booking. Max discount ₹500. Valid for new users.</p>
+          </div>
+          <a href="cars.html" class="btn btn-primary">Book Now & Save</a>
         </div>
-        <hr style="width: 100%; border-color: var(--border-color); margin: 10px 0;">
-        <div id="mobileAuthContainer" style="display: flex; flex-direction: column; width: 100%; gap: 10px;">
-            <button class="mobile-cta" onclick="window.location.href='login/'">Sign In</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo">
+            <div class="nav-logo-mark">E</div>
+            EuroCarz
+          </div>
+          <p class="footer-desc">India's most premium self-drive car rental marketplace. Verified hosts, insured vehicles, doorstep delivery.</p>
         </div>
+        <div>
+          <div class="footer-heading">Company</div>
+          <div class="footer-links">
+            <a href="#" class="footer-link">About Us</a>
+            <a href="admin.html" class="footer-link" style="color:#ffd60a;font-weight:700">⚡ Admin Dashboard</a>
+            <a href="#" class="footer-link">Press</a>
+            <a href="#" class="footer-link">Blog</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Support</div>
+          <div class="footer-links">
+            <a href="#" class="footer-link">Help Center</a>
+            <a href="#" class="footer-link">Safety</a>
+            <a href="#" class="footer-link">Insurance</a>
+            <a href="#" class="footer-link">Contact Us</a>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Legal</div>
+          <div class="footer-links">
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="#" class="footer-link">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 EuroCarz. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn" aria-label="Twitter">𝕏</a>
+          <a href="#" class="social-btn" aria-label="Instagram">📷</a>
+          <a href="#" class="social-btn" aria-label="LinkedIn">in</a>
+        </div>
+      </div>
     </div>
+  </footer>
 
-    <!-- Hero Section -->
-    <section class="hero" id="top">
-        <div class="hero-container">
-            <div class="hero-left">
-                <div class="pill-tag">THE INTELLIGENT FITNESS ECOSYSTEM</div>
-                <h1 class="hero-title">Your Wellness.<br>Connected.<br><span class="highlight-grey">Everyday.</span></h1>
-                <p class="hero-desc">
-                    Aarohh bridges the gap between active social connections, elite trainers, and device analytics. Log daily targets, sync sensors, share milestones, and accelerate your fitness goals.
-                </p>
-                
-                <!-- Email Waitlist Form -->
-                <form class="waitlist-form" onsubmit="handleWaitlistSubmit(event, 'hero')">
-                    <div class="input-group">
-                        <input type="email" placeholder="Enter your email" required class="waitlist-input">
-                        <button type="submit" class="waitlist-btn">Join Waitlist</button>
-                    </div>
-                    <div class="waitlist-success-msg">Thanks! You've been added to the waitlist.</div>
-                </form>
-            </div>
-            <div class="hero-right">
-                <img src="assets/two_phones.png" alt="AAROHH Mobile App Screenshots showing Wellness Tracker and Workout Summary" class="hero-image">
-            </div>
-        </div>
-    </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="features-header">
-            <div class="pill-tag center">FEATURES</div>
-            <h2 class="section-title center">Engineered for results.</h2>
-            <p style="color: var(--text-secondary); text-align: center; max-width: 600px; margin: 12px auto 0 auto;">Our tools allow you to track your workouts, measure daily wellness habits, and join local partner fitness gyms in a single space.</p>
-        </div>
-        
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>Unified Dashboard</h3>
-                <p>Track your calories, water consumption, step counts, and active recovery metrics from connected sensors on one clean screen.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🤝</div>
-                <h3>Active Community</h3>
-                <p>Share wellness logs, celebrate workout check-ins, keep streak counts active, and connect with peer members.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🏋️‍♂️</div>
-                <h3>Coach Direct Connect</h3>
-                <p>Get personalized nutrition targets and scheduled workout programs sent directly to your phone by certified trainers.</p>
-            </div>
-        </div>
-    </section>
 
-    <!-- AI Coach Section -->
-    <section id="ai-coach" class="about" style="background-color: var(--bg-light); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
-        <div class="about-card" style="flex-direction: row-reverse;">
-            <div class="about-left">
-                <div class="pill-tag">AI TRAINING</div>
-                <h2 class="section-title" style="margin-bottom: 20px;">Intelligent feedback loop.</h2>
-                <p class="about-text" style="margin-bottom: 24px;">
-                    Our upcoming AI integration analyzes your logs, sleep metrics, and habit trends to personalize your recovery targets and nutrition suggestions. It acts as an active assistant to help you prepare for workouts.
-                </p>
-                <div style="display: flex; gap: 15px;">
-                    <div style="flex: 1; background-color: var(--bg-white); padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-                        <h4 style="font-weight: 700; margin-bottom: 5px; font-size: 0.95rem;">AI Nutrition</h4>
-                        <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">Adapts target macros based on energy expenditure logs.</p>
-                    </div>
-                    <div style="flex: 1; background-color: var(--bg-white); padding: 15px 20px; border-radius: 12px; border: 1px solid var(--border-color);">
-                        <h4 style="font-weight: 700; margin-bottom: 5px; font-size: 0.95rem;">AI Recovery</h4>
-                        <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">Calculates daily recovery metrics to optimize intensity.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="about-right">
-                <div class="image-wrapper">
-                    <img src="assets/mockup.png" alt="AAROHH AI Coach Suggestion Mockup" class="about-image">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Health Integration Section -->
-    <section id="health" class="features" style="padding-bottom: 100px;">
-        <div class="features-header">
-            <div class="pill-tag center">INTEGRATION</div>
-            <h2 class="section-title center">Sync your wearables.</h2>
-            <p style="color: var(--text-secondary); text-align: center; max-width: 580px; margin: 12px auto 60px auto;">Aarohh seamlessly imports daily biometrics and exercise metrics directly from your favorite smart devices.</p>
-        </div>
-        
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; max-width: 900px; margin: 0 auto;">
-            <div style="flex: 1; min-width: 250px; background-color: var(--bg-light); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; text-align: center;">
-                <span style="font-size: 2.5rem; display: block; margin-bottom: 15px;">⌚</span>
-                <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 8px;">Apple Health & Google Fit</h4>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">Automated step counting, heart rates, sleep tracking, and session sync.</p>
-            </div>
-            <div style="flex: 1; min-width: 250px; background-color: var(--bg-light); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; text-align: center;">
-                <span style="font-size: 2.5rem; display: block; margin-bottom: 15px;">🚴‍♂️</span>
-                <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 8px;">Garmin & Fitbit Connect</h4>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">Direct parsing of custom cycling tracks, athletic cardio, and recovery metrics.</p>
-            </div>
-            <div style="flex: 1; min-width: 250px; background-color: var(--bg-light); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; text-align: center;">
-                <span style="font-size: 2.5rem; display: block; margin-bottom: 15px;">⚖️</span>
-                <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 8px;">Connected Body Scales</h4>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">Biometric weight inputs, water index percentages, and dynamic lean muscle metrics.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Community & Streaks Section -->
-    <section id="community" class="about" style="background-color: var(--bg-white); border-top: 1px solid var(--border-color);">
-        <div class="about-card">
-            <div class="about-left">
-                <div class="pill-tag">COMMUNITY</div>
-                <h2 class="section-title" style="margin-bottom: 20px;">Habit streaks made social.</h2>
-                <p class="about-text" style="margin-bottom: 24px;">
-                    Keep streak counts high with connection posts, photo check-ins, and peer challenges. Our custom social feed allows members to show off wellness milestones without distracting algorithmic ads.
-                </p>
-                <ul style="list-style: none; padding: 0; margin-bottom: 24px;">
-                    <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-primary); font-weight: 500;">
-                        <span style="color: #ff7b00; font-size: 1.2rem;">🔥</span> High streak indicators on your group profiles.
-                    </li>
-                    <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-primary); font-weight: 500;">
-                        <span style="color: #ff7b00; font-size: 1.2rem;">💬</span> Real-time comments on workout logs.
-                    </li>
-                    <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-primary); font-weight: 500;">
-                        <span style="color: #ff7b00; font-size: 1.2rem;">🏆</span> Live leaderboards for joined partner gyms.
-                    </li>
-                </ul>
-            </div>
-            <div class="about-right">
-                <div class="image-wrapper">
-                    <img src="assets/mountain.png" alt="AAROHH Gym Community Mockup" class="about-image">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="features" style="background-color: var(--bg-light); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding-top: 100px; padding-bottom: 100px;">
-        <div class="features-header">
-            <div class="pill-tag center">TESTIMONIALS</div>
-            <h2 class="section-title center">Endorsed by athletes and coaches.</h2>
-        </div>
-        
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; max-width: 1100px; margin: 40px auto 0 auto;">
-            <div style="flex: 1; min-width: 300px; background-color: var(--bg-white); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.01);">
-                <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); font-style: italic; margin-bottom: 20px;">
-                    "Aarohh has completely simplified how I push workouts to my clients. The web portal gives me direct access, and they track their targets in real time on their smart watches. Absolutely beautiful."
-                </p>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #eee; font-weight: bold; display: flex; align-items: center; justify-content: center;">DS</div>
-                    <div>
-                        <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">Devon Smith</h4>
-                        <span style="font-size: 0.75rem; color: var(--text-grey);">Certified Elite Strength Coach</span>
-                    </div>
-                </div>
-            </div>
-            <div style="flex: 1; min-width: 300px; background-color: var(--bg-white); border: 1px solid var(--border-color); border-radius: 20px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.01);">
-                <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); font-style: italic; margin-bottom: 20px;">
-                    "The device syncing is flawless. My steps count, running routes, and active calories log automatically. Pushing my streaks to the feed keeps me accountable with my workout circle."
-                </p>
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #eee; font-weight: bold; display: flex; align-items: center; justify-content: center;">AK</div>
-                    <div>
-                        <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary);">Aarav Kapoor</h4>
-                        <span style="font-size: 0.75rem; color: var(--text-grey);">Aarohh Athlete & Premium Member</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section id="faq" class="faq-section">
-        <div class="faq-container">
-            <div class="pill-tag center">FAQ</div>
-            <h2 class="section-title center" style="margin-bottom: 48px;">Frequently Asked Questions</h2>
-            
-            <div class="faq-list">
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        <span>How does Aarohh sync with my wearables?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Through our companion iOS and Android Flutter applications, Aarohh securely reads biometric data from Apple HealthKit and Google Fit APIs, keeping your targets updated in real time.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        <span>Is my bio-metric health log private?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Absolutely. Your sleep logs, calorie balances, and activity trackers are locked down under standard Supabase Row Level Security (RLS). You retain full authority over what gets shared with coaches or groups.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" onclick="toggleFaq(this)">
-                        <span>How do subscription orders operate?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Subscribing to Aarohh Premium utilizes a simulated secure checkout process on this platform. Payment credentials are validated via backend verification scripts to activate client privileges immediately.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contact-footer">
-        <div class="footer-container">
-            <div class="footer-left">
-                <a href="#" class="logo-container" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
-                    <img src="assets/logo_icon.png" alt="AAROHH Logo Icon" style="height: 24px; width: auto; display: block; object-fit: contain;">
-                    <img src="assets/logo_wordmark.png" alt="AAROHH" style="height: 8px; width: auto; display: block; object-fit: contain; margin-top: 0;">
-                </a>
-                <p class="footer-tagline">
-                    The professional lifestyle & fitness network connecting friends, members, and coaches.
-                </p>
-            </div>
-            <div class="footer-right">
-                <div class="footer-column">
-                    <h4>Company</h4>
-                    <a href="#about">About Us</a>
-                    <a href="mailto:support@aarohh.com">Contact</a>
-                    <a href="careers.html">Careers</a>
-                </div>
-                <div class="footer-column">
-                    <h4>Support</h4>
-                    <a href="#">Help Center</a>
-                    <a href="privacy/">Privacy Policy</a>
-                    <a href="#">Terms & Conditions</a>
-                </div>
-                <div class="footer-column">
-                    <h4>Connect</h4>
-                    <a href="https://www.instagram.com/aarohh.app/" target="_blank" rel="noopener noreferrer">Instagram</a>
-                    <a href="#">YouTube</a>
-                    <a href="mailto:support@aarohh.com">Email</a>
-                    <span class="footer-email-text">support@aarohh.com</span>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 AAROHH. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Privacy Policy Modal -->
-    <div class="modal-overlay" id="privacyModal" onclick="closePrivacyModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closePrivacyModal()">&times;</button>
-            <div class="modal-header">
-                <h2>Privacy Policy</h2>
-                <p>Last updated: June 20, 2026</p>
-            </div>
-            <div class="modal-body">
-                <p>At AAROHH, we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your personal information when you use our fitness network and website.</p>
-                
-                <h3>1. Information We Collect</h3>
-                <p>We may collect information you provide directly to us, such as your email address when you join our waitlist. When the platform is launched, we may collect wellness logs, sleep metrics, habit trends, and connection lists to personalize your feed.</p>
-                
-                <h3>3. Connection Data</h3>
-                <p>AAROHH processes your connections, messages, and feed shares securely to maintain your social network. Biometric logs are stored securely and you retain full control over what metrics are shared with friends or coaches.</p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Initialize Supabase Client
-        const SUPABASE_URL = 'https://bbniblgdjyxolrbwbhek.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJibmlibGdkanl4b2xyYndiaGVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2ODc2MjUsImV4cCI6MjA5ODI2MzYyNX0.7QHb1Hcdwj2c4SZQEA4fSnxioCtWqiF7azYQ--3U0r4';
-        
-        let supabaseClient;
-        try {
-            if (window.supabase && typeof window.supabase.createClient === 'function') {
-                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            } else {
-                console.error("Supabase SDK is not loaded.");
-            }
-        } catch (err) {
-            console.error("Supabase client failed to initialize:", err);
-        }
-
-        // Navigation state handlers
-        if (supabaseClient) {
-            supabaseClient.auth.onAuthStateChange((event, session) => {
-                const user = session ? session.user : null;
-                const navLinksContainer = document.getElementById('navLinks');
-                const authNavContainer = document.getElementById('authNav');
-                const mobileLinksContainer = document.getElementById('mobileNavLinks');
-                const mobileAuthContainer = document.getElementById('mobileAuthContainer');
-                
-                if (user) {
-                    navLinksContainer.innerHTML = `
-                        <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Home</a>
-                        <a href="dashboard/">Dashboard</a>
-                        <a href="profile/">Profile</a>
-                        <a href="subscribe/">Premium</a>
-                    `;
-                    authNavContainer.innerHTML = `
-                        <button class="nav-cta" onclick="handleLogout()" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-primary);">Logout</button>
-                    `;
-                    
-                    mobileLinksContainer.innerHTML = `
-                        <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); toggleMobileMenu(); return false;" class="mobile-link">Home</a>
-                        <a href="dashboard/" class="mobile-link">Dashboard</a>
-                        <a href="profile/" class="mobile-link">Profile</a>
-                        <a href="subscribe/" class="mobile-link">Premium</a>
-                    `;
-                    mobileAuthContainer.innerHTML = `
-                        <button class="mobile-cta" onclick="handleLogout()">Logout</button>
-                    `;
-                } else {
-                    navLinksContainer.innerHTML = `
-                        <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Home</a>
-                        <a href="#features">Features</a>
-                    `;
-                    authNavContainer.innerHTML = `
-                        <button class="nav-cta" onclick="window.location.href='login/'">Sign In</button>
-                    `;
-                    
-                    mobileLinksContainer.innerHTML = `
-                        <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="mobile-link">Home</a>
-                        <a href="#features" class="mobile-link">Features</a>
-                    `;
-                    mobileAuthContainer.innerHTML = `
-                        <button class="mobile-cta" onclick="window.location.href='login/'">Sign In</button>
-                    `;
-                }
-            });
-        }
-
-        // Toggle profile dropdown contents
-        function toggleProfileDropdown() {
-            const dropdown = document.getElementById('profileDropdownContent');
-            if (dropdown) {
-                dropdown.classList.toggle('active');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        window.addEventListener('click', (e) => {
-            if (!e.target.matches('.profile-dropdown-btn')) {
-                const dropdowns = document.getElementsByClassName('profile-dropdown-content');
-                for (let i = 0; i < dropdowns.length; i++) {
-                    const openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('active')) {
-                        openDropdown.classList.remove('active');
-                    }
-                }
-            }
-        });
-
-        // Query active workouts to show alerts/notifications count
-        async function checkLiveNotifications() {
-            try {
-                const session = (await supabaseClient.auth.getSession()).data.session;
-                if (!session) return;
-                const { data: workouts } = await supabaseClient.from('workouts')
-                    .select('id')
-                    .eq('user_id', session.user.id)
-                    .eq('status', 'pending');
-                
-                const badge = document.getElementById('navNotifyBadge');
-                if (workouts && workouts.length > 0) {
-                    if (badge) {
-                        badge.textContent = workouts.length;
-                        badge.style.display = 'inline-block';
-                    }
-                } else {
-                    if (badge) badge.style.display = 'none';
-                }
-            } catch (err) {
-                console.error("Failed fetching alerts:", err);
-            }
-        }
-
-        // Mobile Nav Hamburger Toggle
-        const menuToggle = document.getElementById('menuToggle');
-        const mobileNav = document.getElementById('mobileNav');
-
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            mobileNav.classList.toggle('active');
-        });
-
-        // Close mobile nav when clicking a link
-        document.querySelectorAll('.mobile-link, .mobile-cta').forEach(link => {
-            link.addEventListener('click', () => {
-                menuToggle.classList.remove('active');
-                mobileNav.classList.remove('active');
-            });
-        });
-
-        // Smooth scroll scroll-to implementation
-        function scrollToSection(id) {
-            const el = document.getElementById(id);
-            if (el) {
-                el.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Waitlist Form Handler
-        function handleWaitlistSubmit(event, source) {
-            event.preventDefault();
-            const form = event.target;
-            const inputGroup = form.querySelector('.input-group');
-            const successMsg = form.querySelector('.waitlist-success-msg');
-            
-            inputGroup.style.display = 'none';
-            successMsg.classList.add('visible');
-            
-            console.log(`Waitlist submission from ${source}:`, form.querySelector('input').value);
-        }
-
-        // Privacy Modal Handlers
-        function openPrivacyModal() {
-            const modal = document.getElementById('privacyModal');
-            if (modal) {
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden'; 
-            }
-        }
-
-        function closePrivacyModal() {
-            const modal = document.getElementById('privacyModal');
-            if (modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = ''; 
-            }
-        }
-
-        // FAQ Toggle
-        function toggleFaq(btn) {
-            const item = btn.parentElement;
-            if (item) {
-                item.classList.toggle('active');
-            }
-        }
-
-        async function handleLogout() {
-            try {
-                await supabaseClient.auth.signOut();
-                // Redirect with logout flag to prevent auto-login on the login page
-                window.location.href = 'login/?logout=1';
-            } catch (err) {
-                console.error('Logout failed:', err);
-                window.location.href = 'login/?logout=1';
-            }
-        }
-    </script>
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 </body>
 </html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Become a Host — EuroCarz | List Your Car & Earn</title>
+  <meta name="description" content="List your premium car on EuroCarz and earn ₹50,000+ per month. Fully insured, professionally managed, trusted by 1000+ hosts across India." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .host-hero {
+      min-height: 55vh;
+      background: var(--bg-secondary);
+      display: flex; align-items: center;
+      padding-top: var(--nav-height);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .host-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: 50%;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+      transform: translateX(-50%);
+    }
+    .form-container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+    .form-progress-bar {
+      height: 3px;
+      background: var(--bg-elevated);
+    }
+    .form-progress-fill {
+      height: 100%;
+      background: var(--accent-white);
+      transition: width 0.4s ease;
+      width: 25%;
+    }
+    .form-body { padding: 40px; }
+    .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 64px; }
+    .benefit-card {
+      padding: 28px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      text-align: center;
+    }
+    .benefit-icon { font-size: 2rem; margin-bottom: 12px; }
+    .faq-item {
+      border-bottom: 1px solid var(--border-subtle);
+      overflow: hidden;
+    }
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      padding: 20px 0;
+      background: none;
+      color: var(--text-primary);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: color var(--transition-fast);
+    }
+    .faq-question:hover { color: var(--text-secondary); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+    .faq-answer.open { max-height: 200px; padding-bottom: 16px; }
+    .faq-arrow { transition: transform 0.3s ease; font-size: 12px; color: var(--text-tertiary); }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    @media (max-width: 768px) {
+      .benefits-grid { grid-template-columns: 1fr; }
+      .host-earnings-stats { flex-wrap: wrap; }
+      .form-body { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-mark">E</div>
+          EuroCarz
+        </a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="cars.html" class="nav-link">Browse Cars</a>
+          <a href="become-host.html" class="nav-link active">Become a Host</a>
+        </div>
+        <div class="nav-actions">
+          <a href="cars.html" class="btn-nav-signin" style="text-decoration:none">Book Now</a>
+          <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="cars.html" class="nav-link">Browse Cars</a>
+    <a href="become-host.html" class="nav-link">Become a Host</a>
+    <a href="cars.html" class="nav-link">Book Now</a>
+  </div>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="host-hero">
+      <div class="container">
+        <div style="max-width: 680px; margin: 0 auto; text-align: center; padding: 64px 0;">
+          <span class="badge badge-white" style="margin-bottom:24px;font-size:0.875rem">
+            ✨ Join 1,000+ Hosts Across India
+          </span>
+          <h1 class="display-xl fade-in-up" style="margin-bottom:16px">
+            Your Car.<br />Your Income.
+          </h1>
+          <p class="subheading fade-in-up fade-delay-1" style="font-size:1.0625rem;max-width:480px;margin:0 auto 36px">
+            List your premium car on EuroCarz and earn up to ₹50,000+ per month — fully insured, professionally handled.
+          </p>
+          <!-- Earnings stats -->
+          <div style="display:flex;justify-content:center;gap:40px;flex-wrap:wrap" class="fade-in-up fade-delay-2">
+            <div style="text-align:center">
+              <div style="font-size:2rem;font-weight:800;letter-spacing:-0.03em">₹50K+</div>
+              <div style="font-size:0.8125rem;color:var(--text-tertiary)">Avg monthly earnings</div>
+            </div>
+            <div style="width:1px;background:var(--border-subtle)"></div>
+            <div style="text-align:center">
+              <div style="font-size:2rem;font-weight:800;letter-spacing:-0.03em">100%</div>
+              <div style="font-size:0.8125rem;color:var(--text-tertiary)">Fully insured</div>
+            </div>
+            <div style="width:1px;background:var(--border-subtle)"></div>
+            <div style="text-align:center">
+              <div style="font-size:2rem;font-weight:800;letter-spacing:-0.03em">48h</div>
+              <div style="font-size:0.8125rem;color:var(--text-tertiary)">Payout processing</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MULTI STEP FORM -->
+    <section class="section" style="background: var(--bg-primary)">
+      <div class="container">
+        <div class="section-header fade-in-up" style="margin-bottom: 40px;">
+          <span class="label">Get Started</span>
+          <h2 class="display-md">List Your Car in 4 Steps</h2>
+          <p class="subheading">Quick, simple setup. Go live in under 10 minutes.</p>
+        </div>
+
+        <div class="form-container fade-in-up">
+          <!-- Progress bar -->
+          <div class="form-progress-bar">
+            <div class="form-progress-fill" id="form-progress"></div>
+          </div>
+
+          <!-- Step indicators -->
+          <div style="padding: 32px 40px 0; border-bottom: 1px solid var(--border-subtle); padding-bottom: 24px;">
+            <div class="step-form-header">
+              <div class="step-indicator active" id="si-1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Car Details</div>
+              </div>
+              <div class="step-indicator" id="si-2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Pricing</div>
+              </div>
+              <div class="step-indicator" id="si-3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Photos</div>
+              </div>
+              <div class="step-indicator" id="si-4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Contact</div>
+              </div>
+            </div>
+          </div>
+
+          <form id="host-form">
+            <div class="form-body">
+
+              <!-- STEP 1 -->
+              <div class="form-step" id="step-1">
+                <h3 class="heading" style="margin-bottom:4px">Car Details</h3>
+                <p class="subheading" style="margin-bottom:28px;font-size:0.875rem">Tell us about the car you want to list.</p>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">Car Make</label>
+                    <select class="form-input form-select">
+                      <option value="">Select make</option>
+                      <option>BMW</option><option>Mercedes-Benz</option><option>Audi</option>
+                      <option>Porsche</option><option>Land Rover</option><option>Tesla</option>
+                      <option>Volvo</option><option>Lexus</option><option>Jaguar</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Car Model</label>
+                    <input type="text" class="form-input" placeholder="e.g. 5 Series, GLE, A6" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Year</label>
+                    <select class="form-input form-select">
+                      <option value="">Select year</option>
+                      <option>2026</option><option>2025</option><option>2024</option>
+                      <option>2023</option><option>2022</option><option>2021</option><option>2020</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-input form-select">
+                      <option value="">Select type</option>
+                      <option>Sedan</option><option>SUV</option><option>Hatchback</option>
+                      <option>Electric</option><option>Luxury</option><option>Sports</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Transmission</label>
+                    <select class="form-input form-select">
+                      <option>Automatic</option><option>Manual</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Fuel Type</label>
+                    <select class="form-input form-select">
+                      <option>Petrol</option><option>Diesel</option><option>Electric</option><option>Hybrid</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Number of Seats</label>
+                  <input type="number" class="form-input" placeholder="e.g. 5" min="2" max="9" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Car Colour</label>
+                  <input type="text" class="form-input" placeholder="e.g. Pearl White, Midnight Black" />
+                </div>
+              </div>
+
+              <!-- STEP 2 -->
+              <div class="form-step hidden" id="step-2">
+                <h3 class="heading" style="margin-bottom:4px">Pricing & Availability</h3>
+                <p class="subheading" style="margin-bottom:28px;font-size:0.875rem">Set your daily rate and included kilometres.</p>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">Daily Rate (₹)</label>
+                    <input type="number" class="form-input" placeholder="e.g. 5000" min="500" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Included KM/Day</label>
+                    <input type="number" class="form-input" placeholder="e.g. 300" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Extra KM Rate (₹/km)</label>
+                    <input type="number" class="form-input" placeholder="e.g. 15" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Minimum Rental Days</label>
+                    <input type="number" class="form-input" placeholder="e.g. 1" min="1" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Available Cities</label>
+                  <select class="form-input form-select" multiple style="height:120px">
+                    <option>Phagwara</option>
+                    <option>Jalandhar</option>
+                    <option>Mohali</option>
+                    <option>Chandigarh</option>
+                  </select>
+                  <p style="font-size:0.75rem;color:var(--text-tertiary);margin-top:6px">Hold Ctrl/Cmd to select multiple cities</p>
+                </div>
+                <div class="form-group">
+                  <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+                    <input type="checkbox" style="width:16px;height:16px;accent-color:white" checked />
+                    <span class="form-label" style="margin:0">Offer doorstep delivery</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- STEP 3 -->
+              <div class="form-step hidden" id="step-3">
+                <h3 class="heading" style="margin-bottom:4px">Photos & Description</h3>
+                <p class="subheading" style="margin-bottom:28px;font-size:0.875rem">Great photos get 3× more bookings!</p>
+                <!-- Photo upload area -->
+                <div style="border:2px dashed var(--border-strong);border-radius:var(--radius-lg);padding:48px;text-align:center;margin-bottom:20px;cursor:pointer;transition:all 0.2s" onmouseenter="this.style.borderColor='rgba(255,255,255,0.3)'" onmouseleave="this.style.borderColor='var(--border-strong)'" onclick="document.getElementById('photo-input').click()">
+                  <div style="font-size:2.5rem;margin-bottom:12px">📸</div>
+                  <p style="font-weight:700;margin-bottom:4px">Click to upload photos</p>
+                  <p style="font-size:0.875rem;color:var(--text-tertiary)">JPG, PNG up to 10MB. Min 3 photos recommended.</p>
+                  <input type="file" id="photo-input" multiple accept="image/*" style="display:none" onchange="handlePhotos(this)" />
+                </div>
+                <div id="photo-preview" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px"></div>
+                <div class="form-group">
+                  <label class="form-label">Car Description</label>
+                  <textarea class="form-textarea" placeholder="Describe your car — highlights, special features, condition, what makes it special for renters..."></textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Key Features (comma separated)</label>
+                  <input type="text" class="form-input" placeholder="e.g. Sunroof, Leather seats, GPS Navigation, Parking sensors" />
+                </div>
+              </div>
+
+              <!-- STEP 4 -->
+              <div class="form-step hidden" id="step-4">
+                <h3 class="heading" style="margin-bottom:4px">Your Contact Info</h3>
+                <p class="subheading" style="margin-bottom:28px;font-size:0.875rem">How renters and EuroCarz can reach you.</p>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" placeholder="Your full name" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" placeholder="+91 98765 43210" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" class="form-input" placeholder="you@example.com" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Aadhaar / PAN Number</label>
+                  <input type="text" class="form-input" placeholder="For identity verification" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Bank Account Number (for payouts)</label>
+                  <input type="text" class="form-input" placeholder="Your account number" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">IFSC Code</label>
+                  <input type="text" class="form-input" placeholder="e.g. HDFC0001234" />
+                </div>
+                <div style="background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:20px;margin-top:8px">
+                  <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6">
+                    🔒 <strong>Secure & Private</strong> — Your personal information is encrypted and never shared with renters. Bank details are used only for payout processing by our payment partner.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Navigation buttons -->
+            <div style="padding:0 40px 32px;display:flex;justify-content:space-between;align-items:center">
+              <button type="button" class="btn btn-secondary" id="step-prev" style="display:none">
+                ← Back
+              </button>
+              <div></div>
+              <div style="display:flex;gap:12px">
+                <button type="button" class="btn btn-primary" id="step-next">
+                  Continue →
+                </button>
+                <button type="button" class="btn btn-primary" id="step-submit" style="display:none">
+                  🚀 Submit Listing
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFITS -->
+    <section class="section-sm" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="section-header fade-in-up" style="margin-bottom:40px">
+          <span class="label">Benefits</span>
+          <h2 class="display-md">Why List on EuroCarz?</h2>
+        </div>
+        <div class="benefits-grid">
+          <div class="benefit-card fade-in-up">
+            <div class="benefit-icon">🛡️</div>
+            <h3 class="heading" style="margin-bottom:8px">Complete Insurance</h3>
+            <p class="feature-desc">Every trip is covered by comprehensive insurance. We handle all claims — you just collect the earnings.</p>
+          </div>
+          <div class="benefit-card fade-in-up fade-delay-1">
+            <div class="benefit-icon">💸</div>
+            <h3 class="heading" style="margin-bottom:8px">Fast Payouts</h3>
+            <p class="feature-desc">Earnings are transferred to your bank account within 48 hours after each completed rental.</p>
+          </div>
+          <div class="benefit-card fade-in-up fade-delay-2">
+            <div class="benefit-icon">📊</div>
+            <h3 class="heading" style="margin-bottom:8px">Host Dashboard</h3>
+            <p class="feature-desc">Track bookings, earnings, reviews, and car performance in real-time from your personal dashboard.</p>
+          </div>
+          <div class="benefit-card fade-in-up fade-delay-3">
+            <div class="benefit-icon">⭐</div>
+            <h3 class="heading" style="margin-bottom:8px">Verified Renters</h3>
+            <p class="feature-desc">Every renter is ID-verified and licence-checked before they can book. Your car is in safe hands.</p>
+          </div>
+          <div class="benefit-card fade-in-up fade-delay-1">
+            <div class="benefit-icon">📞</div>
+            <h3 class="heading" style="margin-bottom:8px">Dedicated Support</h3>
+            <p class="feature-desc">A dedicated host success manager assists you with setup, pricing strategy, and any issues.</p>
+          </div>
+          <div class="benefit-card fade-in-up fade-delay-2">
+            <div class="benefit-icon">🚗</div>
+            <h3 class="heading" style="margin-bottom:8px">You Stay in Control</h3>
+            <p class="feature-desc">Block dates, set custom pricing, and approve bookings — you decide when and how your car is rented.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section-sm" style="background:var(--bg-primary)">
+      <div class="container" style="max-width:720px">
+        <div class="section-header fade-in-up" style="margin-bottom:40px">
+          <span class="label">FAQ</span>
+          <h2 class="display-md">Common Questions</h2>
+        </div>
+        <div id="faq-list">
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              What are EuroCarz's commission charges?
+              <span class="faq-arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+              <p style="font-size:0.9375rem;color:var(--text-secondary);line-height:1.7">EuroCarz charges a 20% platform commission on each successful booking. This covers insurance, payment processing, 24/7 support, and platform maintenance. The remaining 80% is yours.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              What if a renter damages my car?
+              <span class="faq-arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+              <p style="font-size:0.9375rem;color:var(--text-secondary);line-height:1.7">All cars on EuroCarz are covered by comprehensive insurance for every trip. In case of damage, the renter's security deposit covers minor damage, and our insurance covers anything beyond that. You don't pay anything.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              How long does listing approval take?
+              <span class="faq-arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+              <p style="font-size:0.9375rem;color:var(--text-secondary);line-height:1.7">Our team reviews and approves listings within 24–48 hours after submission. We may contact you for additional documents or photos during this process.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              What cars are eligible for listing?
+              <span class="faq-arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+              <p style="font-size:0.9375rem;color:var(--text-secondary);line-height:1.7">Currently we accept cars that are 2018 or newer, in good working condition, with valid registration and insurance. We focus on premium and luxury cars — hatchbacks and sedans above ₹8L ex-showroom value are preferred.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+              Can I cancel or block dates after listing?
+              <span class="faq-arrow">▼</span>
+            </button>
+            <div class="faq-answer">
+              <p style="font-size:0.9375rem;color:var(--text-secondary);line-height:1.7">Yes! You have full control via your host dashboard. You can block dates, update pricing, and manage booking requests at any time. Frequent cancellations may affect your host rating.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-overlay" id="success-modal">
+    <div class="modal">
+      <div class="modal-icon">🎊</div>
+      <h2 class="modal-title">Listing Submitted!</h2>
+      <p class="modal-desc">We've received your car listing. Our team will review and approve it within 24–48 hours. You'll be notified by email once it goes live.</p>
+      <div class="modal-actions" style="flex-direction:column">
+        <button class="btn btn-primary btn-full" id="success-modal-close">Back to Home</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo"><div class="nav-logo-mark">E</div>EuroCarz</div>
+          <p class="footer-desc">India's most premium self-drive car rental marketplace.</p>
+        </div>
+        <div><div class="footer-heading">Company</div><div class="footer-links"><a href="#" class="footer-link">About</a><a href="#" class="footer-link">Careers</a></div></div>
+        <div><div class="footer-heading">Support</div><div class="footer-links"><a href="#" class="footer-link">Help Center</a><a href="#" class="footer-link">Contact</a></div></div>
+        <div><div class="footer-heading">Legal</div><div class="footer-links"><a href="#" class="footer-link">Privacy</a><a href="#" class="footer-link">Terms</a></div></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 EuroCarz. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const answer = item.querySelector('.faq-answer');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => {
+        i.classList.remove('open');
+        i.querySelector('.faq-answer').classList.remove('open');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        answer.classList.add('open');
+      }
+    }
+    function handlePhotos(input) {
+      const preview = document.getElementById('photo-preview');
+      preview.innerHTML = '';
+      [...input.files].slice(0,8).forEach(file => {
+        const url = URL.createObjectURL(file);
+        const div = document.createElement('div');
+        div.style.cssText = 'aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--bg-elevated)';
+        div.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover" />`;
+        preview.appendChild(div);
+      });
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

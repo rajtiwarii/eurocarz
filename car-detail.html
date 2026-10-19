@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Detail — EuroCarz | Book Premium Cars</title>
+  <meta name="description" content="Book premium self-drive cars on EuroCarz. View car specs, features, host details and calculate your booking price." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .detail-layout { display: grid; grid-template-columns: 1fr 360px; gap: 40px; align-items: flex-start; }
+    .spec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .spec-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; }
+    .spec-card-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-tertiary); margin-bottom: 6px; }
+    .spec-card-value { font-size: 1rem; font-weight: 700; color: var(--text-primary); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: var(--text-tertiary); margin-bottom: 24px; }
+    .breadcrumb a { color: var(--text-tertiary); }
+    .breadcrumb a:hover { color: var(--text-primary); }
+    .breadcrumb-sep { color: var(--border-strong); }
+    @media (max-width: 900px) {
+      .detail-layout { grid-template-columns: 1fr; }
+      .booking-panel { position: static; }
+      .spec-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery { grid-template-columns: 1fr; height: auto; }
+      .gallery-main { height: 260px; }
+      .gallery-thumb { height: 130px; display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-mark">E</div>
+          EuroCarz
+        </a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="cars.html" class="nav-link active">Browse Cars</a>
+        </div>
+        <div class="nav-actions">
+          <a href="cars.html" class="btn-nav-signin" style="text-decoration:none">Book Now</a>
+          <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="cars.html" class="nav-link">Browse Cars</a>
+  </div>
+
+  <main id="car-detail-root" style="padding-top: var(--nav-height)">
+    <div style="background: var(--bg-secondary); border-bottom: 1px solid var(--border-subtle); padding: 20px 0;">
+      <div class="container">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a>
+          <span class="breadcrumb-sep">›</span>
+          <a href="cars.html">Browse Cars</a>
+          <span class="breadcrumb-sep">›</span>
+          <span id="detail-car-name" style="color: var(--text-primary); font-weight: 600;">Loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-sm">
+      <div class="container">
+        <div class="detail-layout">
+
+          <!-- LEFT: Car Info -->
+          <div>
+            <!-- Gallery -->
+            <div class="gallery" style="margin-bottom: 32px; height:380px;">
+              <div class="gallery-main">
+                <img id="gallery-main-img" src="" alt="Car" style="width:100%;height:100%;object-fit:cover;border-radius: 16px 0 0 16px;" />
+              </div>
+              <div class="gallery-thumb">
+                <img src="" alt="Car view 2" style="width:100%;height:100%;object-fit:cover;border-radius: 0 16px 0 0;" />
+              </div>
+              <div class="gallery-thumb">
+                <img src="" alt="Car view 3" style="width:100%;height:100%;object-fit:cover;border-radius: 0 0 16px 0;" />
+              </div>
+            </div>
+
+            <!-- Title + Rating -->
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:12px">
+              <div>
+                <h1 class="display-md" id="detail-car-name-h1" style="margin-bottom:4px">Loading...</h1>
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                  <span id="detail-rating" style="font-size:0.9375rem;font-weight:600;color:#ffd60a"></span>
+                  <span id="detail-cities" class="badge badge-outline"></span>
+                </div>
+              </div>
+              <button style="padding:10px 12px;background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-md);color:var(--text-secondary);font-size:1rem;" title="Save car">♡ Save</button>
+            </div>
+            <p style="font-size:0.9375rem;color:var(--text-tertiary);margin-bottom:28px">Colour: <strong style="color:var(--text-secondary)" id="detail-color">—</strong> &nbsp;·&nbsp; EuroCarz Fleet</p>
+
+            <!-- Divider -->
+            <div style="height:1px;background:var(--border-subtle);margin-bottom:28px"></div>
+
+            <!-- Specs -->
+            <h2 class="heading" style="margin-bottom:16px">Vehicle Specs</h2>
+            <div class="spec-grid" style="margin-bottom:32px">
+              <div class="spec-card">
+                <div class="spec-card-label">⚙️ Transmission</div>
+                <div class="spec-card-value" id="detail-transmission">—</div>
+              </div>
+              <div class="spec-card">
+                <div class="spec-card-label">⛽ Fuel Type</div>
+                <div class="spec-card-value" id="detail-fuel">—</div>
+              </div>
+              <div class="spec-card">
+                <div class="spec-card-label">👤 Seats</div>
+                <div class="spec-card-value" id="detail-seats">—</div>
+              </div>
+              <div class="spec-card">
+                <div class="spec-card-label">🛣️ KM Included</div>
+                <div class="spec-card-value" id="detail-km">—</div>
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div style="height:1px;background:var(--border-subtle);margin-bottom:28px"></div>
+
+            <!-- Features -->
+            <h2 class="heading" style="margin-bottom:16px">Features & Amenities</h2>
+            <ul id="detail-features" style="list-style:none;margin-bottom:32px"></ul>
+
+            <!-- Divider -->
+            <div style="height:1px;background:var(--border-subtle);margin-bottom:28px"></div>
+
+            <!-- Reviews -->
+            <h2 class="heading" style="margin-bottom:20px">Recent Reviews</h2>
+            <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:32px">
+              <div class="testimonial-card">
+                <div class="stars" style="margin-bottom:10px"><span style="color:#ffd60a;font-size:14px">★★★★★</span></div>
+                <p class="testimonial-text" style="margin-top:0">"Incredible car, incredibly clean. The host Arjun was on time and very professional. Will definitely book again!"</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">S</div>
+                  <div><div class="testimonial-name">Shweta K.</div><div class="testimonial-detail">3 days rental · July 2026</div></div>
+                </div>
+              </div>
+              <div class="testimonial-card">
+                <div class="stars" style="margin-bottom:10px"><span style="color:#ffd60a;font-size:14px">★★★★★</span></div>
+                <p class="testimonial-text" style="margin-top:0">"Top notch experience. The car drove like a dream on the highway. EuroCarz is my go-to now."</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">M</div>
+                  <div><div class="testimonial-name">Manish T.</div><div class="testimonial-detail">5 days rental · June 2026</div></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT: Booking Panel -->
+          <div>
+            <div class="booking-panel">
+              <!-- Price display -->
+              <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:4px">
+                <span class="booking-price-big" id="detail-price">₹—</span>
+                <span style="color:var(--text-tertiary);font-size:0.9375rem">/<span id="booking-price-label">Full Day</span></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px">
+                <span style="color:#ffd60a;font-size:13px">★★★★★</span>
+                <span style="font-size:0.8125rem;color:var(--text-tertiary)" id="detail-rating-small"></span>
+              </div>
+
+              <!-- Duration Selector -->
+              <div style="margin-bottom:16px">
+                <div class="label" style="margin-bottom:10px">Select Duration</div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+                  <button class="dur-btn" data-dur="6hr" style="padding:12px 4px;border:1px solid var(--border-default);border-radius:var(--radius-md);background:var(--bg-surface);color:var(--text-secondary);font-size:0.8125rem;font-weight:500;transition:all 0.15s;cursor:pointer;">
+                    <div style="font-size:0.7rem;color:var(--text-tertiary);margin-bottom:3px">6 HOURS</div>
+                    <div id="dur-price-6hr" style="font-weight:800;font-size:0.9375rem">₹—</div>
+                  </button>
+                  <button class="dur-btn" data-dur="12hr" style="padding:12px 4px;border:1px solid var(--border-default);border-radius:var(--radius-md);background:var(--bg-surface);color:var(--text-secondary);font-size:0.8125rem;font-weight:500;transition:all 0.15s;cursor:pointer;">
+                    <div style="font-size:0.7rem;color:var(--text-tertiary);margin-bottom:3px">12 HOURS</div>
+                    <div id="dur-price-12hr" style="font-weight:800;font-size:0.9375rem">₹—</div>
+                  </button>
+                  <button class="dur-btn" data-dur="day" style="padding:12px 4px;border:1px solid var(--accent-white);border-radius:var(--radius-md);background:var(--accent-white);color:var(--text-inverse);font-size:0.8125rem;font-weight:700;transition:all 0.15s;cursor:pointer;">
+                    <div style="font-size:0.7rem;opacity:0.7;margin-bottom:3px">FULL DAY</div>
+                    <div id="dur-price-day" style="font-weight:800;font-size:0.9375rem">₹—</div>
+                  </button>
+                </div>
+              </div>
+
+              <div class="booking-divider"></div>
+
+              <div class="form-group">
+                <label class="form-label">📅 Pick-up Date</label>
+                <input type="date" class="form-input" id="booking-pickup" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">🕐 Pick-up Time</label>
+                <select class="form-input form-select" id="booking-time">
+                  <option value="">Select time</option>
+                  <option value="06:00">6:00 AM</option>
+                  <option value="07:00">7:00 AM</option>
+                  <option value="08:00">8:00 AM</option>
+                  <option value="09:00">9:00 AM</option>
+                  <option value="10:00">10:00 AM</option>
+                  <option value="11:00">11:00 AM</option>
+                  <option value="12:00">12:00 PM (Noon)</option>
+                  <option value="13:00">1:00 PM</option>
+                  <option value="14:00">2:00 PM</option>
+                  <option value="15:00">3:00 PM</option>
+                  <option value="16:00">4:00 PM</option>
+                  <option value="17:00">5:00 PM</option>
+                  <option value="18:00">6:00 PM</option>
+                  <option value="19:00">7:00 PM</option>
+                  <option value="20:00">8:00 PM</option>
+                </select>
+              </div>
+              <div class="form-group" id="days-row">
+                <label class="form-label">🗓️ Number of Days <span style="font-size:0.75rem;color:var(--text-tertiary)">(Full Day only)</span></label>
+                <select class="form-input form-select" id="booking-days-select">
+                  <option value="1">1 Day</option>
+                  <option value="2">2 Days</option>
+                  <option value="3">3 Days</option>
+                  <option value="4">4 Days</option>
+                  <option value="5">5 Days</option>
+                  <option value="6">6 Days</option>
+                  <option value="7">7 Days (1 Week)</option>
+                  <option value="10">10 Days</option>
+                  <option value="14">14 Days (2 Weeks)</option>
+                  <option value="30">30 Days (1 Month)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">📍 Pickup City</label>
+                <select class="form-input form-select" id="booking-city">
+                  <option value="">Select city</option>
+                  <option>Jalandhar</option>
+                  <option>Phagwara</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">👤 Your Full Name</label>
+                <input type="text" class="form-input" id="booking-name" placeholder="Full name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">📱 Mobile Number <span style="font-size:0.75rem;color:var(--text-tertiary)">(WhatsApp)</span></label>
+                <input type="tel" class="form-input" id="booking-phone" placeholder="+91 98765 43210" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">🚗 Trip Type</label>
+                <select class="form-input form-select" id="booking-trip-type">
+                  <option value="">Select trip type</option>
+                  <option value="Local">Local</option>
+                  <option value="Outstation">Outstation</option>
+                  <option value="Airport Transfer">Airport Transfer</option>
+                  <option value="One Way">One Way</option>
+                  <option value="Round Trip">Round Trip</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">👥 Number of Passengers</label>
+                <select class="form-input form-select" id="booking-passengers">
+                  <option value="">Select passengers</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">📌 Destination <span style="font-size:0.75rem;color:var(--text-tertiary)">(optional)</span></label>
+                <input type="text" class="form-input" id="booking-destination" placeholder="e.g. Chandigarh, Delhi..." />
+              </div>
+              <div class="form-group">
+                <label class="form-label">📝 Additional Requirements <span style="font-size:0.75rem;color:var(--text-tertiary)">(optional)</span></label>
+                <textarea class="form-input" id="booking-additional" rows="2" placeholder="Driver needed, child seat, late pickup, etc." style="resize:vertical;min-height:60px"></textarea>
+              </div>
+
+              <!-- Breakdown -->
+              <div id="booking-breakdown" style="display:none">
+                <div class="booking-divider"></div>
+                <div class="booking-row">
+                  <span class="label-text"><span id="booking-base-price">₹—</span> × <span id="booking-units">—</span></span>
+                  <span id="booking-base-total">₹—</span>
+                </div>
+                <div class="booking-row total">
+                  <span>Estimated Total</span>
+                  <span id="booking-total">₹—</span>
+                </div>
+              </div>
+
+              <!-- WhatsApp notice -->
+              <div style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);border-radius:var(--radius-md);padding:12px;margin-top:12px;font-size:0.8125rem;color:var(--text-secondary);text-align:center">
+                💬 Clicking the button below will open <strong>WhatsApp</strong> with your details pre-filled. Press <strong>Send</strong> to submit your enquiry. This is <em>not</em> an instant booking.
+              </div>
+
+              <div class="booking-divider"></div>
+              <button class="btn btn-primary btn-full btn-lg" id="book-now-btn" style="letter-spacing:-0.01em;background:#25d366;border-color:#25d366">
+                💬 Enquire on WhatsApp
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Similar Cars -->
+        <div style="margin-top:64px">
+          <div class="section-header" style="margin-bottom:32px;text-align:left">
+            <h2 class="display-md">Similar Cars</h2>
+          </div>
+          <div class="grid-3" id="similar-cars-grid"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ENQUIRY RESULT MODAL -->
+  <div class="modal-overlay" id="booking-modal">
+    <div class="modal">
+      <div class="modal-icon">💬</div>
+      <h2 class="modal-title">WhatsApp Opened!</h2>
+      <p class="modal-desc">Please press <strong>Send</strong> in WhatsApp to submit your booking enquiry. We will confirm availability and pricing shortly.</p>
+      <div class="modal-actions" style="flex-direction:column">
+        <button class="btn btn-primary btn-full" id="modal-close">Close</button>
+        <a href="cars.html" class="btn btn-ghost btn-full">Browse More Cars</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo"><div class="nav-logo-mark">E</div>EuroCarz</div>
+          <p class="footer-desc">India's most premium self-drive car rental marketplace.</p>
+        </div>
+        <div><div class="footer-heading">Company</div><div class="footer-links"><a href="#" class="footer-link">About</a><a href="#" class="footer-link">Careers</a></div></div>
+        <div><div class="footer-heading">Support</div><div class="footer-links"><a href="#" class="footer-link">Help Center</a><a href="#" class="footer-link">Contact</a></div></div>
+        <div><div class="footer-heading">Legal</div><div class="footer-links"><a href="#" class="footer-link">Privacy</a><a href="#" class="footer-link">Terms</a></div></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 EuroCarz. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>
+    // Sync car name to both places
+    const nameEl = document.getElementById('detail-car-name');
+    const nameH1 = document.getElementById('detail-car-name-h1');
+    const ratingSmall = document.getElementById('detail-rating-small');
+    const ratingEl = document.getElementById('detail-rating');
+    if (nameEl && nameH1) {
+      const obs = new MutationObserver(() => {
+        nameH1.textContent = nameEl.textContent;
+        ratingSmall.textContent = ratingEl.textContent;
+      });
+      obs.observe(nameEl, {childList: true, characterData: true, subtree: true});
+    }
+  </script>
+</body>
+</html>

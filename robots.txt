@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-Allow: /subscribe/
-Allow: /careers.html
-Disallow: /dashboard/
-Disallow: /profile/
-
-Sitemap: https://www.aarohh.com/sitemap.xml

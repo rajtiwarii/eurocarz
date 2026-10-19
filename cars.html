@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse Cars — EuroCarz | Premium Car Rentals</title>
+  <meta name="description" content="Browse our curated fleet of premium rental cars. Filter by city, category, price and more. BMW, Mercedes, Tesla, Range Rover and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .cars-layout { display: flex; gap: 32px; align-items: flex-start; }
+    .cars-main { flex: 1; min-width: 0; }
+    .filter-sidebar { position: sticky; top: calc(var(--nav-height) + 24px); }
+    .filter-header { font-size: 1rem; font-weight: 800; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; }
+    .sort-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .sort-select { padding: 10px 16px; background: var(--bg-card); border: 1px solid var(--border-default); border-radius: var(--radius-md); color: var(--text-primary); font-size: 0.875rem; font-weight: 500; }
+    .sort-select option { background: var(--bg-card); }
+    @media (max-width: 900px) {
+      .cars-layout { flex-direction: column; }
+      .filter-sidebar { position: static; width: 100%; }
+      .filter-panel { display: none; }
+      .filter-panel.open { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <div class="navbar-inner">
+        <a href="index.html" class="nav-logo">
+          <div class="nav-logo-mark">E</div>
+          EuroCarz
+        </a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="cars.html" class="nav-link active">Browse Cars</a>
+        </div>
+        <div class="nav-actions">
+          <a href="cars.html" class="btn-nav-signin" style="text-decoration:none">Book Now</a>
+          <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="cars.html" class="nav-link">Browse Cars</a>
+    <a href="cars.html" class="nav-link">Book Now</a>
+  </div>
+
+  <main style="padding-top: var(--nav-height)">
+
+    <!-- PAGE HEADER -->
+    <div style="background: var(--bg-secondary); border-bottom: 1px solid var(--border-subtle); padding: 32px 0;">
+      <div class="container">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+          <div>
+            <h1 class="display-md" style="margin-bottom:4px">Browse Cars</h1>
+            <p class="subheading">Curated premium vehicles, ready to drive.</p>
+          </div>
+          <!-- Mobile filter toggle -->
+          <button class="btn btn-secondary btn-sm" id="mobile-filter-toggle" style="display:none" onclick="document.getElementById('filter-panel').classList.toggle('open')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+            Filters
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-sm">
+      <div class="container">
+        <div class="cars-layout">
+
+          <!-- SIDEBAR -->
+          <div class="filter-sidebar" style="width:260px">
+            <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-xl);padding:24px" id="filter-panel" class="filter-panel open">
+
+              <div class="filter-header">
+                <span>Filters</span>
+                <button class="btn-ghost btn-sm" onclick="clearFilters()" style="font-size:0.8125rem;padding:4px 10px">Clear all</button>
+              </div>
+
+              <!-- City Filter -->
+              <div class="filter-section">
+                <div class="filter-title">City</div>
+                <select id="filter-city" class="form-input form-select" style="font-size:0.875rem">
+                  <option value="">All Cities</option>
+                  <option value="Phagwara">Phagwara</option>
+                  <option value="Jalandhar">Jalandhar</option>
+                  <option value="Mohali">Mohali</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                </select>
+              </div>
+
+              <div class="filter-divider"></div>
+
+              <!-- Price Range -->
+              <div class="filter-section">
+                <div class="filter-title">Max Price / Day</div>
+                <div class="price-range-display">
+                  <span>₹1,000</span>
+                  <span id="price-display">₹10,000</span>
+                </div>
+                <input type="range" id="price-range" min="1000" max="10000" step="500" value="10000" />
+              </div>
+
+              <div class="filter-divider"></div>
+
+              <!-- Transmission -->
+              <div class="filter-section">
+                <div class="filter-title">Transmission</div>
+                <label class="filter-option"><input type="checkbox" class="filter-trans" value="automatic" /><label>Automatic</label></label>
+                <label class="filter-option"><input type="checkbox" class="filter-trans" value="manual" /><label>Manual</label></label>
+              </div>
+
+              <div class="filter-divider"></div>
+
+              <!-- Fuel -->
+              <div class="filter-section">
+                <div class="filter-title">Fuel Type</div>
+                <label class="filter-option"><input type="checkbox" class="filter-fuel" value="petrol" /><label>Petrol</label></label>
+                <label class="filter-option"><input type="checkbox" class="filter-fuel" value="diesel" /><label>Diesel</label></label>
+                <label class="filter-option"><input type="checkbox" class="filter-fuel" value="electric" /><label>Electric</label></label>
+                <label class="filter-option"><input type="checkbox" class="filter-fuel" value="hybrid" /><label>Hybrid</label></label>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- MAIN CONTENT -->
+          <div class="cars-main">
+            <div class="sort-bar">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span id="cars-count" style="font-size:0.9375rem;font-weight:600;color:var(--text-secondary)">12 cars found</span>
+              </div>
+              <select class="sort-select" id="sort-by">
+                <option value="rating">Sort: Top Rated</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="newest">Newest First</option>
+              </select>
+            </div>
+
+            <div class="grid-3" id="cars-grid" style="gap:20px">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="footer-logo"><div class="nav-logo-mark">E</div>EuroCarz</div>
+          <p class="footer-desc">India's most premium self-drive car rental marketplace.</p>
+        </div>
+        <div><div class="footer-heading">Company</div><div class="footer-links"><a href="#" class="footer-link">About</a><a href="#" class="footer-link">Careers</a></div></div>
+        <div><div class="footer-heading">Support</div><div class="footer-links"><a href="#" class="footer-link">Help Center</a><a href="#" class="footer-link">Contact</a></div></div>
+        <div><div class="footer-heading">Legal</div><div class="footer-links"><a href="#" class="footer-link">Privacy</a><a href="#" class="footer-link">Terms</a></div></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 EuroCarz. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function clearFilters() {
+      document.querySelectorAll('.filter-category, .filter-trans, .filter-fuel').forEach(cb => cb.checked = false);
+      document.getElementById('price-range').value = 15000;
+      document.getElementById('price-display').textContent = '₹15,000';
+      document.getElementById('filter-city').value = '';
+      document.getElementById('sort-by').value = 'rating';
+      if (typeof applyFilters === 'function') applyFilters();
+    }
+    // Show mobile filter button on small screens
+    if (window.innerWidth <= 900) {
+      document.getElementById('mobile-filter-toggle').style.display = 'flex';
+      document.getElementById('filter-panel').classList.remove('open');
+    }
+  </script>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+</body>
+</html>
+

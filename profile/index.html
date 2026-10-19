@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile — AAROHH</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/logo_square.png?v=6.0">
+    <link rel="stylesheet" href="../style.css?v=2.6">
+
+    <!-- Resource load error tracking -->
+    <script>
+        window.addEventListener('error', function(e) {
+            if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) {
+                console.error("Resource failed to load:", e.target.src || e.target.href);
+                if (window.logDebug) {
+                    logDebug("Resource load failed: " + (e.target.src || e.target.href));
+                }
+            }
+        }, true);
+    </script>
+    
+    <!-- Supabase SDK -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+        import { getFirestore, doc, getDoc, collection, query, where, orderBy, getDocs, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+        const firebaseConfig = {
+            apiKey: 'AIzaSyALqQLRDTtdtZhC1ceyVTJfmwdgb3Qf6xk',
+            authDomain: 'yogyah-5aa01.firebaseapp.com',
+            projectId: 'yogyah-5aa01',
+            storageBucket: 'yogyah-5aa01.firebasestorage.app',
+            messagingSenderId: '364430634705',
+            appId: '1:364430634705:web:949baf3be012dc6d449ff0'
+        };
+        const fbApp = initializeApp(firebaseConfig);
+        const fbDb = getFirestore(fbApp);
+        window._firestoreDb = fbDb;
+        window._firestoreHelpers = { doc, getDoc, collection, query, where, orderBy, getDocs, limit };
+        window._firebaseReady = true;
+        document.dispatchEvent(new Event('firebase-ready'));
+    </script>
+
+    <style>
+        :root {
+            --font-family: 'Plus Jakarta Sans', sans-serif;
+            --bg-white: #ffffff;
+            --bg-light: #f5f5f7;
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-grey: #aeaeb2;
+            --border-color: #e5e5ea;
+            --accent: #000000;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-family); background-color: var(--bg-light); color: var(--text-primary); }
+
+        /* Dark mode */
+        body.dark-mode {
+            --bg-white: #121212; --bg-light: #0a0a0a; --text-primary: #f5f5f7;
+            --text-secondary: #86868b; --border-color: #2c2c2e;
+        }
+
+        /* --- NAV --- */
+        .profile-navbar {
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border-color);
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 0 32px; height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .profile-navbar .logo-area { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .profile-navbar nav a {
+            text-decoration: none; color: var(--text-secondary); font-size: 0.875rem; font-weight: 500;
+            margin-left: 28px; transition: color 0.2s;
+        }
+        .profile-navbar nav a:hover, .profile-navbar nav a.active { color: var(--text-primary); }
+        .logout-btn {
+            background: transparent; border: 1px solid var(--border-color);
+            color: var(--text-primary); border-radius: 20px; padding: 6px 16px;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: var(--font-family);
+            transition: all 0.2s;
+        }
+        .logout-btn:hover { background: var(--bg-light); }
+
+        /* --- MAIN LAYOUT --- */
+        .profile-page {
+            max-width: 1100px; margin: 80px auto 60px auto; padding: 24px 24px 0 24px;
+        }
+        .page-header { margin-bottom: 28px; }
+        .page-header h1 { font-size: 2rem; font-weight: 800; }
+        .page-header p { color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px; }
+
+        .profile-grid {
+            display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start;
+        }
+        @media (max-width: 768px) {
+            .profile-grid { grid-template-columns: 1fr; }
+            .profile-page { margin-top: 70px; }
+            .profile-navbar nav { display: none; }
+        }
+
+        /* --- CARDS --- */
+        .card {
+            background: var(--bg-white); border: 1px solid var(--border-color);
+            border-radius: 20px; padding: 28px;
+        }
+
+        /* --- PROFILE HEADER CARD --- */
+        .profile-header-card {
+            background: var(--bg-white); border: 1px solid var(--border-color);
+            border-radius: 20px; padding: 28px; margin-bottom: 20px;
+            display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;
+            flex-wrap: wrap;
+        }
+        .profile-identity { display: flex; align-items: flex-start; gap: 20px; }
+        .avatar-wrapper { position: relative; flex-shrink: 0; }
+        .avatar-wrapper img {
+            width: 88px; height: 88px; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--border-color);
+        }
+        .online-dot {
+            position: absolute; bottom: 4px; right: 4px;
+            width: 14px; height: 14px; background: #34C759;
+            border-radius: 50%; border: 2px solid var(--bg-white);
+        }
+        .profile-meta h2 { font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
+        .profile-meta .handle { color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 6px; }
+        .profile-meta .bio { color: var(--text-primary); font-size: 0.875rem; margin-bottom: 8px; }
+        .profile-meta .location-row {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            color: var(--text-secondary); font-size: 0.8rem;
+        }
+        .profile-meta .location-row span { display: flex; align-items: center; gap: 4px; }
+
+        /* Premium badge */
+        .premium-card {
+            background: #1a1a1a; color: #fff; border-radius: 16px;
+            padding: 16px 20px; min-width: 220px; cursor: default;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .premium-card .crown { font-size: 1.1rem; margin-right: 8px; }
+        .premium-card .badge-title { font-weight: 700; font-size: 0.9rem; }
+        .premium-card .badge-sub { font-size: 0.75rem; color: rgba(255,255,255,0.65); margin-top: 2px; }
+        .premium-card .chevron { font-size: 0.9rem; opacity: 0.7; }
+
+        /* --- STATS ROW --- */
+        .stats-row {
+            background: var(--bg-white); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 20px 28px;
+            display: flex; align-items: center; gap: 0; margin-bottom: 20px;
+        }
+        .stat-item {
+            flex: 1; text-align: center; padding: 10px 0;
+            border-right: 1px solid var(--border-color);
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-item .stat-icon {
+            width: 36px; height: 36px; border-radius: 10px; margin: 0 auto 8px auto;
+            display: flex; align-items: center; justify-content: center; font-size: 1rem;
+        }
+        .stat-item .stat-icon.green { background: #d1fae5; }
+        .stat-item .stat-icon.blue { background: #dbeafe; }
+        .stat-item .stat-icon.grey { background: var(--bg-light); }
+        .stat-item .stat-number { font-size: 1.4rem; font-weight: 800; color: var(--text-primary); }
+        .stat-item .stat-label { font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px; }
+
+        /* --- TABS --- */
+        .tabs-bar {
+            background: var(--bg-white); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 6px; margin-bottom: 20px;
+            display: flex; gap: 4px; overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 8px 18px; border-radius: 10px; border: none;
+            font-family: var(--font-family); font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; background: transparent; color: var(--text-secondary);
+            white-space: nowrap; transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--text-primary); color: #fff;
+        }
+        .tab-btn:hover:not(.active) { background: var(--bg-light); color: var(--text-primary); }
+
+        /* --- TAB PANELS --- */
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* Posts */
+        .post-card {
+            background: var(--bg-white); border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 20px; margin-bottom: 16px;
+        }
+        .post-author-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .post-author-info { display: flex; align-items: center; gap: 10px; }
+        .post-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
+        .post-author-name { font-weight: 700; font-size: 0.875rem; }
+        .post-author-handle { color: var(--text-secondary); font-size: 0.75rem; }
+        .post-time { color: var(--text-grey); font-size: 0.75rem; }
+        .post-content { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px; }
+        .post-actions { display: flex; align-items: center; gap: 24px; }
+        .post-action-btn {
+            display: flex; align-items: center; gap: 5px;
+            color: var(--text-grey); font-size: 0.8rem; background: none;
+            border: none; cursor: default; font-family: var(--font-family);
+        }
+
+        /* Workout plan */
+        .workout-day-card {
+            background: var(--bg-white); border: 1px solid var(--border-color);
+            border-radius: 14px; padding: 18px; margin-bottom: 12px;
+        }
+        .workout-day-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 12px; color: var(--text-primary); }
+        .exercise-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 0; border-bottom: 1px solid var(--border-color);
+        }
+        .exercise-row:last-child { border-bottom: none; }
+        .exercise-name { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
+        .exercise-meta { font-size: 0.75rem; color: var(--text-secondary); }
+
+        /* Diet plan */
+        .diet-day-card {
+            background: var(--bg-white); border: 1px solid var(--border-color);
+            border-radius: 14px; padding: 18px; margin-bottom: 12px;
+        }
+        .meal-row {
+            display: flex; justify-content: space-between; padding: 7px 0;
+            border-bottom: 1px solid var(--border-color); font-size: 0.85rem;
+        }
+        .meal-row:last-child { border-bottom: none; }
+        .meal-name { font-weight: 600; color: var(--text-primary); }
+        .meal-cal { color: var(--text-secondary); }
+
+        /* Stats panel */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .stats-metric-card {
+            background: var(--bg-light); border-radius: 14px; padding: 16px; text-align: center;
+        }
+        .stats-metric-card .emoji { font-size: 1.5rem; }
+        .stats-metric-card .metric-val { font-size: 1.5rem; font-weight: 800; margin-top: 6px; }
+        .stats-metric-card .metric-label { font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px; }
+
+        /* Right sidebar cards */
+        .streak-card { margin-bottom: 20px; }
+        .streak-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 16px; }
+        .streak-ring-wrapper { display: flex; align-items: center; justify-content: space-between; }
+        .streak-number { font-size: 2.2rem; font-weight: 800; }
+        .streak-sub { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
+        .streak-tagline { color: var(--text-secondary); font-size: 0.8rem; margin-top: 12px; }
+
+        .ring-svg { transform: rotate(-90deg); }
+        .ring-bg { fill: none; stroke: var(--bg-light); stroke-width: 8; }
+        .ring-progress { fill: none; stroke: var(--text-primary); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 0.8s ease; }
+
+        /* Achievements */
+        .achievements-card { }
+        .achievements-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .achievements-header h3 { font-size: 0.9rem; font-weight: 700; }
+        .achievements-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+        .achievement-badge {
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            flex: 1; min-width: 70px; text-align: center;
+        }
+        .achievement-icon {
+            width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+            background: var(--bg-white);
+        }
+        .achievement-label { font-size: 0.7rem; color: var(--text-secondary); line-height: 1.2; }
+
+        /* Loading */
+        .loading-skeleton {
+            background: linear-gradient(90deg, var(--bg-light) 25%, var(--border-color) 50%, var(--bg-light) 75%);
+            background-size: 200% 100%; animation: shimmer 1.4s infinite;
+            border-radius: 8px; height: 16px;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-secondary); font-size: 0.875rem; }
+        .empty-state .empty-icon { font-size: 2rem; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="profile-navbar">
+        <a href="../" class="logo-area">
+            <img src="../assets/logo_icon.png" alt="AAROHH" style="height: 24px;">
+            <img src="../assets/logo_wordmark.png" alt="AAROHH" style="height: 8px;">
+        </a>
+        <nav>
+            <a href="../">Home</a>
+            <a href="../dashboard/">Dashboard</a>
+            <a href="./" class="active">Profile</a>
+            <a href="../subscribe/">Premium</a>
+        </nav>
+        <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </header>
+
+    <!-- Main profile page -->
+    <div class="profile-page">
+        <div class="page-header">
+            <h1>Profile</h1>
+            <p>Your journey, your story.</p>
+        </div>
+
+        <div class="profile-grid">
+            <!-- LEFT COLUMN -->
+            <div>
+                <!-- Profile identity card -->
+                <div class="profile-header-card">
+                    <div class="profile-identity">
+                        <div class="avatar-wrapper">
+                            <img id="profileAvatar" src="../assets/logo_square.png" alt="Profile Avatar">
+                            <span class="online-dot"></span>
+                        </div>
+                        <div class="profile-meta">
+                            <h2 id="profileName">Loading...</h2>
+                            <p class="handle" id="profileHandle">@—</p>
+                            <p class="bio" id="profileBio" style="display:none;"></p>
+                            <div class="location-row">
+                                <span id="profileLocation" style="display:none;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <span id="locationText"></span>
+                                </span>
+                                <span id="joinedDate">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    <span id="joinedText">Joined —</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Premium badge -->
+                    <div id="premiumBadgeArea"></div>
+                </div>
+
+                <!-- Stats row: posts / followers / following -->
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-icon grey">📝</div>
+                        <div class="stat-number" id="postsCount">—</div>
+                        <div class="stat-label">Posts</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon green">👥</div>
+                        <div class="stat-number" id="followersCount">0</div>
+                        <div class="stat-label">Followers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon blue">👤</div>
+                        <div class="stat-number" id="followingCount">0</div>
+                        <div class="stat-label">Following</div>
+                    </div>
+                </div>
+
+                <!-- Tab bar -->
+                <div class="tabs-bar">
+                    <button class="tab-btn active" onclick="switchTab('posts')">Posts</button>
+                    <button class="tab-btn" onclick="switchTab('stats')">Stats</button>
+                    <button class="tab-btn" onclick="switchTab('workouts')">Workouts</button>
+                    <button class="tab-btn" onclick="switchTab('diet')">Diet Plans</button>
+                    <button class="tab-btn" onclick="switchTab('activity')">Activity</button>
+                </div>
+
+                <!-- Posts tab -->
+                <div class="tab-panel active" id="tab-posts">
+                    <div id="postsListContainer">
+                        <div class="card" style="text-align:center; padding: 40px; color: var(--text-secondary); font-size: 0.875rem;">Loading posts...</div>
+                    </div>
+                </div>
+
+                <!-- Stats tab -->
+                <div class="tab-panel" id="tab-stats">
+                    <div class="card">
+                        <h3 style="font-size:0.95rem; font-weight:700; margin-bottom:20px;">Today's Metrics</h3>
+                        <div class="stats-grid">
+                            <div class="stats-metric-card">
+                                <div class="emoji">🔥</div>
+                                <div class="metric-val" id="statsCalories">—</div>
+                                <div class="metric-label">Calories Consumed</div>
+                            </div>
+                            <div class="stats-metric-card">
+                                <div class="emoji">💧</div>
+                                <div class="metric-val" id="statsWater">—</div>
+                                <div class="metric-label">Water Intake (ml)</div>
+                            </div>
+                            <div class="stats-metric-card">
+                                <div class="emoji">👟</div>
+                                <div class="metric-val" id="statsSteps">—</div>
+                                <div class="metric-label">Steps Today</div>
+                            </div>
+                            <div class="stats-metric-card">
+                                <div class="emoji">⚡</div>
+                                <div class="metric-val" id="statsActive">—</div>
+                                <div class="metric-label">Active Calories</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border-color);">
+                            <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:8px;">
+                                <span style="color:var(--text-secondary);">Weight</span>
+                                <span id="statsWeight" style="font-weight:700;">—</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:8px;">
+                                <span style="color:var(--text-secondary);">Height</span>
+                                <span id="statsHeight" style="font-weight:700;">—</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                                <span style="color:var(--text-secondary);">DOB</span>
+                                <span id="statsDob" style="font-weight:700;">—</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Workouts tab -->
+                <div class="tab-panel" id="tab-workouts">
+                    <div id="workoutPlanContainer">
+                        <div class="card" style="text-align:center; padding: 40px; color: var(--text-secondary);">Loading workout plan...</div>
+                    </div>
+                </div>
+
+                <!-- Diet tab -->
+                <div class="tab-panel" id="tab-diet">
+                    <div id="dietPlanContainer">
+                        <div class="card" style="text-align:center; padding: 40px; color: var(--text-secondary);">Loading diet plan...</div>
+                    </div>
+                </div>
+
+                <!-- Activity tab -->
+                <div class="tab-panel" id="tab-activity">
+                    <div class="card">
+                        <h3 style="font-size:0.95rem; font-weight:700; margin-bottom:16px;">Recent Activity</h3>
+                        <div id="activityList">
+                            <div class="empty-state"><div class="empty-icon">📅</div>Activity logged from the Aarohh app will appear here.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDEBAR -->
+            <div>
+                <!-- Streak card -->
+                <div class="card streak-card">
+                    <div class="streak-title">Current Streak 🔥</div>
+                    <div class="streak-ring-wrapper">
+                        <div>
+                            <div class="streak-number" id="streakNumber">—</div>
+                            <div class="streak-sub">days</div>
+                        </div>
+                        <svg width="72" height="72" viewBox="0 0 72 72">
+                            <circle class="ring-bg" cx="36" cy="36" r="30"/>
+                            <circle class="ring-progress" id="streakRing" cx="36" cy="36" r="30"
+                                stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+                        </svg>
+                    </div>
+                    <p class="streak-tagline" id="streakTagline">Sync your app to see your streak.</p>
+                </div>
+
+                <!-- Achievements card -->
+                <div class="card achievements-card">
+                    <div class="achievements-header">
+                        <h3>Achievements</h3>
+                    </div>
+                    <div class="achievements-grid" id="achievementsGrid">
+                        <!-- Dynamic achievements -->
+                        <div class="achievement-badge">
+                            <div class="achievement-icon">👟</div>
+                            <div class="achievement-label">Getting Started</div>
+                        </div>
+                        <div class="achievement-badge">
+                            <div class="achievement-icon">💧</div>
+                            <div class="achievement-label">Hydration Hero</div>
+                        </div>
+                        <div class="achievement-badge">
+                            <div class="achievement-icon">🔥</div>
+                            <div class="achievement-label">Calories Burn</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Debug Log Banner at bottom of page -->
+    <div id="debugLogContainer" style="background:#222; color:#0f0; padding:15px; font-family:monospace; font-size:11px; border-top:2px solid #333; position:fixed; bottom:0; left:0; right:0; max-height:120px; overflow-y:auto; z-index:99999; display:none;">
+        <strong>[Aarohh Profile Debug Log]</strong><br>
+    </div>
+
+    <script>
+        // Check for debug query param to show logs
+        if (window.location.search.includes('debug=1')) {
+            document.getElementById('debugLogContainer').style.display = 'block';
+        }
+
+        function logDebug(msg) {
+            console.log("[DEBUG]", msg);
+            const container = document.getElementById('debugLogContainer');
+            if (container) {
+                const line = document.createElement('div');
+                line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+                container.appendChild(line);
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        // Global error handler
+        window.onerror = function(message, source, lineno, colno, error) {
+            logDebug(`ERROR: ${message} at ${source}:${lineno}:${colno}`);
+            return false;
+        };
+
+        const SUPABASE_URL = 'https://bbniblgdjyxolrbwbhek.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJibmlibGdkanl4b2xyYndiaGVrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2ODc2MjUsImV4cCI6MjA5ODI2MzYyNX0.7QHb1Hcdwj2c4SZQEA4fSnxioCtWqiF7azYQ--3U0r4';
+
+        let supabaseClient, currentUser, appUserProfile;
+
+        // Apply theme
+        try {
+            if (localStorage.getItem('appearance') === 'dark') document.body.classList.add('dark-mode');
+        } catch(e) {}
+
+        logDebug("Initializing Supabase client...");
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            logDebug("Supabase client created.");
+        } catch(e) {
+            logDebug("Supabase init failed: " + e.message);
+        }
+
+        // ── MAIN ENTRY POINT ──────────────────────────────────────────────────────
+        // Single place where everything starts. No race conditions.
+        async function initProfile() {
+            logDebug("initProfile() called");
+
+            if (!supabaseClient) {
+                document.getElementById('profileName').textContent = 'Auth Error';
+                return;
+            }
+
+            // Step A: Get session (reads from localStorage, fast)
+            let session = null;
+            try {
+                const resp = await supabaseClient.auth.getSession();
+                session = resp.data.session;
+                logDebug("getSession: " + (session ? "user=" + session.user.email : "null"));
+            } catch(e) {
+                logDebug("getSession error: " + e.message);
+            }
+
+            if (!session || !session.user) {
+                logDebug("No session — redirecting to login");
+                window.location.href = '../login/?logout=1';
+                return;
+            }
+
+            // Step B: We have a user — render immediately from session data
+            currentUser = session.user;
+            logDebug("currentUser set: " + currentUser.email + " id=" + currentUser.id);
+            renderProfileFromAuth(currentUser);
+
+            // Step C: Load richer data in background (DB + Firestore)
+            loadProfileData().catch(e => logDebug("loadProfileData error: " + e.message));
+        }
+
+        // Listen for explicit sign-out only
+        if (supabaseClient) {
+            supabaseClient.auth.onAuthStateChange((event) => {
+                if (event === 'SIGNED_OUT') {
+                    window.location.href = '../login/?logout=1';
+                }
+            });
+        }
+
+        // Kick off on page load
+        initProfile();
+
+
+        // Wait for Firebase module
+        function waitForFirebase() {
+            return new Promise(resolve => {
+                if (window._firebaseReady) { 
+                    logDebug("Firebase is already ready.");
+                    resolve(); 
+                    return; 
+                }
+                logDebug("Waiting for firebase-ready event...");
+                document.addEventListener('firebase-ready', () => {
+                    logDebug("firebase-ready event received.");
+                    resolve();
+                }, { once: true });
+                setTimeout(() => {
+                    logDebug("Firebase wait timed out (4s). Resolving anyway.");
+                    resolve();
+                }, 4000);
+            });
+        }
+
+        // Tab switching
+        function switchTab(name) {
+            logDebug("Switching tab to: " + name);
+            try {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                
+                // Find tab button by name attribute or by looping
+                let matchedBtn = null;
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    if (btn.getAttribute('onclick')?.includes(name)) {
+                        matchedBtn = btn;
+                    }
+                });
+                if (matchedBtn) {
+                    matchedBtn.classList.add('active');
+                }
+                
+                const panel = document.getElementById(`tab-${name}`);
+                if (panel) panel.classList.add('active');
+            } catch(e) {
+                logDebug("switchTab error: " + e.message);
+            }
+        }
+
+        // ====== LOAD ALL PROFILE DATA (called after renderProfileFromAuth) ======
+        async function loadProfileData() {
+            logDebug("loadProfileData started. currentUser=" + (currentUser ? currentUser.email : "null"));
+            if (!currentUser) { logDebug("loadProfileData: no currentUser, aborting"); return; }
+
+            // STEP 1: Try to get richer data from Supabase DB and enhance the UI
+            let dbProfile = null;
+            try {
+                dbProfile = await fetchSupabaseProfile();
+                logDebug("DB profile: " + (dbProfile ? JSON.stringify(dbProfile).substring(0, 120) : "null"));
+                if (dbProfile) {
+                    enhanceProfileFromDB(dbProfile);
+                    appUserProfile = dbProfile;
+                }
+            } catch(e) { logDebug("DB profile fetch failed: " + e.message); }
+
+            // STEP 3: Firestore data (streak, stats, workout, diet)
+            await waitForFirebase();
+            // Use the Supabase UID as Firestore doc key (same uid used by app)
+            const firestoreUid = currentUser.id;
+            let firestoreData = null;
+            try {
+                const db = window._firestoreDb;
+                const { doc, getDoc } = window._firestoreHelpers;
+                if (db && doc && getDoc) {
+                    const snap = await getDoc(doc(db, 'users', firestoreUid));
+                    if (snap.exists()) {
+                        firestoreData = snap.data();
+                        logDebug("Firestore data found for uid: " + firestoreUid);
+                        renderFirestoreProfile(firestoreData, dbProfile || {});
+                    } else {
+                        logDebug("No Firestore doc for uid: " + firestoreUid);
+                    }
+                }
+            } catch(err) { logDebug('Firestore user doc error: ' + err.message); }
+
+            // STEP 4: Posts
+            loadUserPosts(firestoreUid, dbProfile || { name: currentUser.user_metadata?.full_name, photo_url: currentUser.user_metadata?.avatar_url });
+
+            // STEP 5: Workout & Diet plans
+            loadWorkoutPlan(firestoreData);
+            loadDietPlan(firestoreData);
+        }
+
+        // Render profile card immediately using auth metadata — always works
+        function renderProfileFromAuth(user) {
+            const meta = user.user_metadata || {};
+            const name = meta.full_name || meta.name || user.email?.split('@')[0] || 'Aarohh User';
+            const username = user.email?.split('@')[0] || 'user';
+            const photo = meta.avatar_url || meta.picture || null;
+
+            document.getElementById('profileName').textContent = name;
+            document.getElementById('profileHandle').textContent = '@' + username;
+            if (photo) document.getElementById('profileAvatar').src = photo;
+
+            // Joined date from auth created_at
+            const created = user.created_at;
+            if (created) {
+                const d = new Date(created);
+                document.getElementById('joinedText').textContent = 'Joined ' + d.toLocaleString('default', {month:'short'}) + ' ' + d.getFullYear();
+            }
+
+            logDebug("renderProfileFromAuth: name=" + name + " username=" + username);
+        }
+
+        // Enhance already-rendered profile with richer DB data
+        function enhanceProfileFromDB(profile) {
+            if (profile.name) document.getElementById('profileName').textContent = profile.name;
+            if (profile.username) document.getElementById('profileHandle').textContent = '@' + profile.username;
+            if (profile.photo_url) document.getElementById('profileAvatar').src = profile.photo_url;
+
+            if (profile.bio) {
+                const bioEl = document.getElementById('profileBio');
+                bioEl.textContent = profile.bio;
+                bioEl.style.display = 'block';
+            }
+
+            const created = profile.created_at || currentUser?.created_at;
+            if (created) {
+                const d = new Date(created);
+                document.getElementById('joinedText').textContent = 'Joined ' + d.toLocaleString('default', {month:'short'}) + ' ' + d.getFullYear();
+            }
+
+            // Premium badge
+            const premiumArea = document.getElementById('premiumBadgeArea');
+            if (profile.is_premium) {
+                premiumArea.innerHTML = `
+                    <div class="premium-card">
+                        <div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span class="crown">👑</span>
+                                <span class="badge-title">Premium Member</span>
+                            </div>
+                            <div class="badge-sub">Active until 06 Jul 2027</div>
+                        </div>
+                        <span class="chevron">›</span>
+                    </div>`;
+            }
+
+            logDebug("enhanceProfileFromDB complete");
+        }
+
+        async function fetchSupabaseProfile() {
+            if (!currentUser) { logDebug("fetchSupabaseProfile: no currentUser"); return null; }
+            try {
+                // Try by Supabase auth UID
+                const { data: byId, error: idErr } = await supabaseClient.from('users').select('*').eq('id', currentUser.id).maybeSingle();
+                logDebug("DB by id: " + (byId ? 'HIT' : 'miss') + (idErr ? ' err=' + idErr.message : ''));
+                if (byId) return byId;
+
+                // Fallback: try by email
+                if (currentUser.email) {
+                    const { data: byEmail, error: emailErr } = await supabaseClient.from('users').select('*').eq('email', currentUser.email).maybeSingle();
+                    logDebug("DB by email: " + (byEmail ? 'HIT' : 'miss') + (emailErr ? ' err=' + emailErr.message : ''));
+                    if (byEmail) return byEmail;
+                }
+
+                logDebug("No DB profile found — will render from auth metadata only");
+                return null;
+            } catch(err) {
+                logDebug('fetchSupabaseProfile exception: ' + err.message);
+                return null;
+            }
+        }
+
+        function renderFirestoreProfile(data, sbProfile) {
+            const prof = data.profile || {};
+
+            // Location from profile
+            const location = prof.location || sbProfile?.location;
+            if (location) {
+                document.getElementById('locationText').textContent = location;
+                document.getElementById('profileLocation').style.display = 'flex';
+            }
+
+            // Stats
+            const pd = data.profile_data || {};
+            document.getElementById('statsCalories').textContent = pd.caloriesConsumed ?? '—';
+            document.getElementById('statsWater').textContent = pd.waterToday ?? '—';
+            document.getElementById('statsSteps').textContent = pd.stepsToday ?? '—';
+            document.getElementById('statsActive').textContent = pd.activeCalories ?? '—';
+            document.getElementById('statsWeight').textContent = prof.weight ? `${prof.weight} kg` : '—';
+            document.getElementById('statsHeight').textContent = prof.height ? `${prof.height} cm` : '—';
+            document.getElementById('statsDob').textContent = prof.dob || '—';
+
+            // Streak
+            const streak = pd.streak || 0;
+            document.getElementById('streakNumber').textContent = streak;
+            const circumference = 188.5;
+            const maxStreak = Math.max(streak, 30);
+            const offset = circumference - (streak / maxStreak) * circumference;
+            document.getElementById('streakRing').style.strokeDashoffset = Math.max(0, offset);
+            if (streak > 0) {
+                document.getElementById('streakTagline').textContent = streak >= 7
+                    ? `Keep it up! You're on fire! 🔥`
+                    : `${streak} day${streak > 1 ? 's' : ''} strong. Keep going!`;
+            }
+
+            // Followers/following from Firestore
+            if (data.followers !== undefined) document.getElementById('followersCount').textContent = Array.isArray(data.followers) ? data.followers.length : (data.followersCount || 0);
+            if (data.following !== undefined) document.getElementById('followingCount').textContent = Array.isArray(data.following) ? data.following.length : (data.followingCount || 0);
+
+            // Achievements based on metrics
+            renderAchievements(pd, streak);
+        }
+
+        function renderAchievements(pd, streak) {
+            const grid = document.getElementById('achievementsGrid');
+            const badges = [
+                { icon: '👟', label: 'Getting Started', unlocked: true },
+                { icon: '💧', label: 'Hydration Hero', unlocked: (pd.waterToday || 0) >= 2000 },
+                { icon: '🔥', label: 'Calories Burn', unlocked: (pd.activeCalories || 0) > 0 },
+                { icon: '🏃', label: '10K Steps', unlocked: (pd.stepsToday || 0) >= 10000 },
+                { icon: '🔥', label: '7-Day Streak', unlocked: streak >= 7 },
+                { icon: '⭐', label: 'Goal Setter', unlocked: (pd.caloriesConsumed || 0) > 0 },
+            ];
+            grid.innerHTML = badges.map(b => `
+                <div class="achievement-badge" style="opacity:${b.unlocked ? 1 : 0.4}">
+                    <div class="achievement-icon">${b.icon}</div>
+                    <div class="achievement-label">${b.label}</div>
+                </div>`).join('');
+        }
+
+        async function loadUserPosts(firebaseUid, sbProfile) {
+            const container = document.getElementById('postsListContainer');
+            try {
+                await waitForFirebase();
+                const db = window._firestoreDb;
+                const { collection, query, where, orderBy, getDocs, limit } = window._firestoreHelpers;
+
+                // Query posts by this user's Firebase uid
+                let allPosts = [];
+                if (firebaseUid) {
+                    try {
+                        const q = query(collection(db, 'posts'), where('authorId', '==', firebaseUid), orderBy('timestamp', 'desc'), limit(20));
+                        const snap = await getDocs(q);
+                        snap.forEach(d => allPosts.push({ id: d.id, ...d.data() }));
+                    } catch(e) {
+                        // Fallback: query by authorName
+                        if (sbProfile?.name) {
+                            const q2 = query(collection(db, 'posts'), where('authorName', '==', sbProfile.name), orderBy('timestamp', 'desc'), limit(20));
+                            const snap2 = await getDocs(q2);
+                            snap2.forEach(d => allPosts.push({ id: d.id, ...d.data() }));
+                        }
+                    }
+                }
+
+                // Update posts count
+                document.getElementById('postsCount').textContent = allPosts.length;
+
+                if (allPosts.length === 0) {
+                    container.innerHTML = `<div class="card"><div class="empty-state"><div class="empty-icon">✍️</div>No posts yet. Share your fitness journey in the Aarohh app!</div></div>`;
+                    return;
+                }
+
+                container.innerHTML = allPosts.map(p => {
+                    const likesCount = p.likesCount || (Array.isArray(p.likes) ? p.likes.length : 0);
+                    const postTime = p.timestamp?.toDate ? p.timestamp.toDate() : new Date();
+                    const timeAgo = getTimeAgo(postTime);
+                    const avatarSrc = p.authorAvatar || sbProfile?.photo_url || '../assets/logo_square.png';
+                    return `
+                    <div class="post-card">
+                        <div class="post-author-row">
+                            <div class="post-author-info">
+                                <img class="post-avatar" src="${avatarSrc}" onerror="this.src='../assets/logo_square.png'" alt="">
+                                <div>
+                                    <div class="post-author-name">${p.authorName || sbProfile?.name || 'Aarohh User'}</div>
+                                    <div class="post-author-handle">${sbProfile?.username ? '@' + sbProfile.username : ''} • ${timeAgo}</div>
+                                </div>
+                            </div>
+                            <div style="color:var(--text-grey); font-size:1.2rem;">···</div>
+                        </div>
+                        <p class="post-content">${p.content || p.text || ''}</p>
+                        ${p.image ? `<img src="${p.image}" style="width:100%;border-radius:12px;margin-bottom:14px;max-height:240px;object-fit:cover;">` : ''}
+                        <div class="post-actions">
+                            <button class="post-action-btn">♡ <span>${likesCount}</span></button>
+                            <button class="post-action-btn">💬 <span>${p.commentsCount || 0}</span></button>
+                            <button class="post-action-btn" style="margin-left:auto;">↗</button>
+                        </div>
+                    </div>`;
+                }).join('');
+            } catch(err) {
+                console.error('loadUserPosts error:', err);
+                container.innerHTML = `<div class="card"><div class="empty-state">Could not load posts. Please try again.</div></div>`;
+            }
+        }
+
+        function loadWorkoutPlan(firestoreData) {
+            const container = document.getElementById('workoutPlanContainer');
+            if (!firestoreData) {
+                container.innerHTML = `<div class="card"><div class="empty-state"><div class="empty-icon">💪</div>Generate a workout plan in the Aarohh app first.</div></div>`;
+                return;
+            }
+            const plan = firestoreData.currentWorkoutPlan || [];
+            if (!plan.length) {
+                container.innerHTML = `<div class="card"><div class="empty-state"><div class="empty-icon">💪</div>No workout plan found. Generate one in the app!</div></div>`;
+                return;
+            }
+            const weekdays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+            const startDay = firestoreData.workoutStartDay || 'Monday';
+            const startIdx = weekdays.indexOf(startDay);
+            const todayIdx = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1;
+
+            container.innerHTML = plan.map((day, idx) => {
+                const isToday = startIdx >= 0 ? ((idx + startIdx) % 7 === todayIdx) : idx === todayIdx;
+                const exercises = day.exercises || [];
+                return `
+                <div class="workout-day-card" style="${isToday ? 'border-color: #000; border-width: 2px;' : ''}">
+                    <div class="workout-day-title">
+                        ${isToday ? '<span style="background:#000;color:#fff;border-radius:6px;padding:2px 8px;font-size:0.7rem;margin-right:8px;">TODAY</span>' : ''}
+                        ${day.title || weekdays[(startIdx + idx) % 7]}
+                    </div>
+                    ${exercises.length === 0 ? '<p style="color:var(--text-secondary);font-size:0.8rem;">Rest Day</p>' :
+                        exercises.map(ex => `
+                        <div class="exercise-row">
+                            <div>
+                                <div class="exercise-name">${ex.name || 'Exercise'}</div>
+                                <div class="exercise-meta">${ex.sets || 3} sets × ${ex.reps || '10'} reps</div>
+                            </div>
+                            <span style="font-size:0.8rem;color:${ex.done ? '#34C759' : 'var(--text-grey)'};">${ex.done ? '✓ Done' : '—'}</span>
+                        </div>`).join('')
+                    }
+                </div>`;
+            }).join('');
+        }
+
+        function loadDietPlan(firestoreData) {
+            const container = document.getElementById('dietPlanContainer');
+            if (!firestoreData) {
+                container.innerHTML = `<div class="card"><div class="empty-state"><div class="empty-icon">🥗</div>Generate a diet plan in the Aarohh app first.</div></div>`;
+                return;
+            }
+            const plan = firestoreData.currentDietPlan || [];
+            if (!plan.length) {
+                container.innerHTML = `<div class="card"><div class="empty-state"><div class="empty-icon">🥗</div>No diet plan found. Generate one in the app!</div></div>`;
+                return;
+            }
+            container.innerHTML = plan.map((day, idx) => {
+                const meals = day.meals || [];
+                return `
+                <div class="diet-day-card">
+                    <div class="workout-day-title" style="margin-bottom:12px;">Day ${idx + 1}${day.title ? ' — ' + day.title : ''}</div>
+                    ${meals.map(m => `
+                    <div class="meal-row">
+                        <span class="meal-name">${m.name || m.meal || 'Meal'}</span>
+                        <span class="meal-cal">${m.calories ? m.calories + ' kcal' : ''}</span>
+                    </div>`).join('')}
+                </div>`;
+            }).join('');
+        }
+
+        function getTimeAgo(date) {
+            const secs = Math.floor((new Date() - date) / 1000);
+            if (secs < 60) return 'just now';
+            const mins = Math.floor(secs / 60);
+            if (mins < 60) return `${mins}m ago`;
+            const hours = Math.floor(mins / 60);
+            if (hours < 24) return `${hours}h ago`;
+            const days = Math.floor(hours / 24);
+            if (days < 7) return `${days}d ago`;
+            return date.toLocaleDateString();
+        }
+
+        async function handleLogout() {
+            try {
+                await supabaseClient.auth.signOut();
+            } catch (err) {
+                console.error('Logout failed:', err);
+            } finally {
+                window.location.href = '../login/?logout=1';
+            }
+        }
+    </script>
+</body>
+</html>

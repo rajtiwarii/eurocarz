@@ -33,7 +33,7 @@ const CARS_DATA = [
     id: 2,
     name: 'Mahindra XUV 7XO',
     color: 'Champagne Gold',
-    fuel: 'petrol',
+    fuel: 'diesel',
     transmission: 'automatic',
     seats: 7,
     price_day:  4500,

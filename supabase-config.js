@@ -77,12 +77,12 @@ async function dbGetCars(includeUnavailable = false) {
         const dbCarMap = new Map();
         data.forEach(c => dbCarMap.set(c.id, c));
 
-        // Start with CARS_DATA and update with Supabase data if present, or add Supabase-only cars
+        // Start with CARS_DATA (local definitions take precedence for price and details)
         const mergedList = CARS_DATA.map(localCar => {
           if (dbCarMap.has(localCar.id)) {
             const dbCar = dbCarMap.get(localCar.id);
             dbCarMap.delete(localCar.id);
-            return { ...localCar, ...dbCar };
+            return { ...dbCar, ...localCar };
           }
           return localCar;
         });

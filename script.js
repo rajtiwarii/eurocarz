@@ -12,12 +12,12 @@ const CITIES = ['Phagwara', 'Jalandhar', 'Mohali', 'Chandigarh'];
 const CARS_DATA = [
   {
     id: 1,
-    name: 'Mahindra Roxx',
+    name: 'Mahindra Thar Roxx',
     color: 'Glossy Black',
     fuel: 'diesel',
     transmission: 'manual',
     seats: 7,
-    price_day:  3500,
+    price_day:  4000,
     price_12hr: 2200,
     price_6hr:  1200,
     rating: 4.8,

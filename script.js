@@ -93,7 +93,7 @@ const CARS_DATA = [
     fuel: 'diesel',
     transmission: 'manual',
     seats: 5,
-    price_day:  2400,
+    price_day:  2500,
     price_12hr: 1400,
     price_6hr:   900,
     rating: 4.5,

@@ -3,11 +3,11 @@
 // ============================================
 
 // ====== CITIES ======
-const CITIES = ['Phagwara', 'Jalandhar', 'Mohali', 'Chandigarh'];
+const CITIES = ['LPU Phagwara', 'Phagwara', 'Jalandhar', 'Mohali', 'Chandigarh'];
 
 // ====== LOCAL CAR DATA ======
 // pricing: price_day / price_12hr / price_6hr
-// cities: all cars available in Jalandhar + Phagwara
+// cities: all cars available in Jalandhar + Phagwara + LPU Phagwara
 // transmission: ALL cars are manual EXCEPT Mahindra XUV 7XO (automatic)
 const CARS_DATA = [
   {
@@ -25,7 +25,7 @@ const CARS_DATA = [
     image: 'images/roxx.jpg',
     host: 'EuroCarz Fleet',
     badge: 'New',
-    cities: ['Jalandhar', 'Phagwara'],
+    cities: ['Jalandhar', 'Phagwara', 'LPU Phagwara'],
     km: 300,
     features: ['7 Seater', 'Panoramic sunroof', 'ADAS safety suite', 'Wireless Apple CarPlay', '6 airbags', '360° camera']
   },
@@ -44,7 +44,7 @@ const CARS_DATA = [
     image: 'images/xuv7xo.jpg',
     host: 'EuroCarz Fleet',
     badge: 'Premium',
-    cities: ['Jalandhar', 'Phagwara'],
+    cities: ['Jalandhar', 'Phagwara', 'LPU Phagwara'],
     km: 300,
     features: ['7 Seater', 'Level 2 ADAS', '12.3" dual screens', 'Harman Kardon audio', 'Panoramic sunroof', 'Ventilated seats']
   },
@@ -63,7 +63,7 @@ const CARS_DATA = [
     image: 'images/scorpion.jpg',
     host: 'EuroCarz Fleet',
     badge: null,
-    cities: ['Jalandhar', 'Phagwara'],
+    cities: ['Jalandhar', 'Phagwara', 'LPU Phagwara'],
     km: 350,
     features: ['7 Seater', '4WD option', 'Sony audio system', '6 airbags', 'Wireless charging', 'Cruise control']
   },
@@ -82,7 +82,7 @@ const CARS_DATA = [
     image: 'images/sonet.jpg',
     host: 'EuroCarz Fleet',
     badge: null,
-    cities: ['Jalandhar', 'Phagwara'],
+    cities: ['Jalandhar', 'Phagwara', 'LPU Phagwara'],
     km: 300,
     features: ['Sunroof', '10.25" infotainment', 'Bose audio', 'ADAS', 'Wireless charging', 'Ventilated seats']
   },
@@ -101,7 +101,7 @@ const CARS_DATA = [
     image: 'images/sonet.jpg',
     host: 'EuroCarz Fleet',
     badge: 'Value Pick',
-    cities: ['Jalandhar', 'Phagwara'],
+    cities: ['Jalandhar', 'Phagwara', 'LPU Phagwara'],
     km: 350,
     features: ['Sunroof', '10.25" infotainment', 'ADAS safety', 'Rear camera', 'Auto climate control', 'Cruise control']
   },
@@ -120,7 +120,7 @@ const CARS_DATA = [
     image: 'images/punch.jpg',
     host: 'EuroCarz Fleet',
     badge: 'Best Value',
-    cities: ['Jalandhar', 'Phagwara'],
+    cities: ['Jalandhar', 'Phagwara', 'LPU Phagwara'],
     km: 300,
     features: ['Micro SUV', '10.25" touchscreen', 'Wireless CarPlay', 'iRA connected tech', 'Auto headlights', '6 airbags']
   },
@@ -137,7 +137,7 @@ const CARS_DATA = [
     rating: 4.9,
     reviews: 12,
     image: 'images/fortuner.jpg',
-    cities: ['Jalandhar', 'Phagwara'],
+    cities: ['Jalandhar', 'Phagwara', 'LPU Phagwara'],
     km: 300,
     description: 'Travel in comfort and style with the Toyota Fortuner, a premium SUV offering a spacious interior, commanding road presence, and a comfortable experience for family trips, business travel, and outstation journeys.',
     features: ['7 Seater', 'Premium SUV', '9\" touchscreen', 'Wireless CarPlay', 'Leather seats', '8 airbags', 'Cruise control', 'Rear AC vents']
@@ -246,11 +246,10 @@ function reObserveFadeEls(container) {
 const searchBtn = document.getElementById('search-btn');
 if (searchBtn) {
   searchBtn.addEventListener('click', () => {
-    const city    = document.getElementById('search-city')?.value || '';
-    const pickup  = document.getElementById('search-pickup')?.value || '';
-    const dropoff = document.getElementById('search-dropoff')?.value || '';
-    const params  = new URLSearchParams({ city, pickup, dropoff });
-    window.location.href = `cars.html?${params.toString()}`;
+    const city = document.getElementById('search-city')?.value || '';
+    const params = new URLSearchParams();
+    if (city) params.set('city', city);
+    window.location.href = `cars.html${params.toString() ? `?${params.toString()}` : ''}`;
   });
 }
 
@@ -366,7 +365,7 @@ if (carsGrid) {
       const matchTrans = transmission.length === 0 || transmission.includes(car.transmission);
       const matchFuel  = fuel.length === 0 || fuel.includes(car.fuel);
       const matchPrice = priceDay <= maxPrice;
-      const matchCity  = cityVal === '' || carCities.some(c => c.toLowerCase().includes(cityVal.toLowerCase()));
+      const matchCity  = cityVal === '' || carCities.some(c => c.toLowerCase().includes(cityVal.toLowerCase()) || cityVal.toLowerCase().includes(c.toLowerCase()));
       return matchTrans && matchFuel && matchPrice && matchCity;
     });
 

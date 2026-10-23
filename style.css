@@ -377,13 +377,13 @@ input, select, textarea { font-family: var(--font); outline: none; }
   border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  max-width: 780px;
+  max-width: 560px;
   margin: 0 auto;
   box-shadow: var(--shadow-xl);
 }
 .search-fields {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
 }
 .search-field {
   padding: 22px 24px;

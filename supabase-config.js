@@ -98,10 +98,14 @@ async function dbGetCars(includeUnavailable = false) {
 
   const unavailableIds = getUnavailableCarIds();
 
-  // Mark availability state
+  // Mark availability state and ensure LPU Phagwara is included in all cars
   carsList = carsList.map(c => {
     const isUnavail = unavailableIds.includes(c.id) || c.available === false;
-    return { ...c, available: !isUnavail };
+    let cities = Array.isArray(c.cities) ? [...c.cities] : [c.city || 'Phagwara'];
+    if (!cities.some(ci => ci.toLowerCase().includes('lpu'))) {
+      cities.push('LPU Phagwara');
+    }
+    return { ...c, cities, available: !isUnavail };
   });
 
   if (!includeUnavailable) {

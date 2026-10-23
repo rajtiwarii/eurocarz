@@ -252,6 +252,15 @@ if (searchBtn) {
     window.location.href = `cars.html${params.toString() ? `?${params.toString()}` : ''}`;
   });
 }
+const searchCitySelect = document.getElementById('search-city');
+if (searchCitySelect) {
+  searchCitySelect.addEventListener('change', () => {
+    const city = searchCitySelect.value;
+    if (typeof filterFeaturedCars === 'function') {
+      filterFeaturedCars(city);
+    }
+  });
+}
 
 // ====== RENDER CAR CARD ======
 function renderCarCard(car) {
@@ -307,19 +316,36 @@ function renderCarCard(car) {
 
 // ====== HOMEPAGE: FEATURED CARS ======
 const featuredGrid = document.getElementById('featured-cars-grid');
+let indexAllCars = [];
+
+function filterFeaturedCars(cityFilter = '') {
+  if (!featuredGrid || !indexAllCars.length) return;
+  let carsToShow = indexAllCars;
+  // When choosing LPU Phagwara or All, all cars are visible
+  const isLPU = cityFilter.toLowerCase().includes('lpu');
+  if (cityFilter && !isLPU) {
+    carsToShow = indexAllCars.filter(car => {
+      const carCities = Array.isArray(car.cities) ? car.cities : [car.city || ''];
+      return carCities.some(c => c.toLowerCase().includes(cityFilter.toLowerCase()) || cityFilter.toLowerCase().includes(c.toLowerCase()));
+    });
+  }
+  featuredGrid.innerHTML = carsToShow.map(c => renderCarCard(c)).join('');
+  reObserveFadeEls(featuredGrid);
+}
+
 if (featuredGrid) {
   const initFeatured = async () => {
-    let cars = CARS_DATA;
+    indexAllCars = CARS_DATA;
     if (typeof dbGetCars === 'function') {
       try {
         const { data, error } = await dbGetCars();
-        if (data && !error && data.length > 0) cars = data;
+        if (data && !error && data.length > 0) indexAllCars = data;
       } catch (err) {
         console.warn('Error fetching cars:', err);
       }
     }
-    featuredGrid.innerHTML = cars.map(c => renderCarCard(c)).join('');
-    reObserveFadeEls(featuredGrid);
+    const initialCity = document.getElementById('search-city')?.value || '';
+    filterFeaturedCars(initialCity);
   };
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initFeatured);
@@ -365,7 +391,8 @@ if (carsGrid) {
       const matchTrans = transmission.length === 0 || transmission.includes(car.transmission);
       const matchFuel  = fuel.length === 0 || fuel.includes(car.fuel);
       const matchPrice = priceDay <= maxPrice;
-      const matchCity  = cityVal === '' || carCities.some(c => c.toLowerCase().includes(cityVal.toLowerCase()) || cityVal.toLowerCase().includes(c.toLowerCase()));
+      const isLPU      = cityVal.toLowerCase().includes('lpu');
+      const matchCity  = cityVal === '' || isLPU || carCities.some(c => c.toLowerCase().includes(cityVal.toLowerCase()) || cityVal.toLowerCase().includes(c.toLowerCase()));
       return matchTrans && matchFuel && matchPrice && matchCity;
     });
 
